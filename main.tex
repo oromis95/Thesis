@@ -6,8 +6,7 @@
 \usepackage{subcaption}
 \usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
 \usepackage{fancyhdr}
-\usepackage{biblatex}
-\addbibresource{references.bib}
+\usepackage{natbib}
 \pagestyle{fancy}
 \fancyfoot{}
 \fancyfoot[C]{\thepage}
@@ -15,8 +14,9 @@
 \usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-
 \input{titlepage.tex}
+\usepackage{enumitem}
+
 \begin{document}
 
 \chapter{Abstract}
@@ -47,4 +47,7 @@ Il concetto ivi sviluppato non riguarda il semplice ampliamento dei range sui vi
 \input{chapters/appendix.tex}
 
 \listoffigures
+
+\bibliographystyle{plain}
+\bibliography{references}
 \end{document}
