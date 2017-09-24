@@ -1,7 +1,7 @@
 \section{Incipit}
 
 In un modello relazionale, la scoperta dipendenza funzionali assume un ruolo importante durante la progettazione o normalizzazione. Già da molto queste dipendenze vengono utilizzate per migliorare la qualità dei database.
-Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, che siano provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposta un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD) per catturare delle consistenze più ampie nei dati.
+Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, che siano provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposta un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD) \footnote{In tutta la tesi Dipendenze Funzionali Approssimate e Dipendenze Funzionali Rilassate indicano lo stesso concetto} per catturare delle consistenze più ampie nei dati.
 Una volta individuate, queste RFD possono essere utilizzate in data cleaning sia in sistemi di query approssimate. Nei sistemi di query sorgono problemi quando effettuata l'interrogazione viene restituita una risposta vuota o non soddisfacente. In questi casi potrebbe interessare non solo gli elementi che combaciano esattamente con la query , ma anche quelli simili, se però possiedono qualche legame con la query. Un modo per effettuare questa operazione è quello di utilizzare una RFD.
 Un sistema di Query Relaxation (basato su AFD) ,che non utilizza solo un semplice ampliamento dei range di ricerca , può essere di estrema utilità in un qualsiasi motore di ricerca in quanto riesce a trovare delle associazioni nascoste fra le varie tuple del database.
 
@@ -83,10 +83,44 @@ $c_{1_i}(t_1[A_i])$ dà vero se il predicato $c_1$, sull'attributo $A_i$ restitu
 \end{itemize}
 \end{theorem}
 
-Nel lavoro di tesi vengono trattate solo le RFD che rilassano il vincolo di uguaglianza. Data RFD $X \xrightarrow{} Y$ essa vale su una relazione $r$ se e solo se la distanza fra due tuple $t_1$ e $t_2$, i cui valori sui singoli attributi $A_i$ non superano una certa soglia $\beta_i$, è inferiore ad una certa soglia $a_A$ su ogni attributo $A \in X$, allora la distanza fra $t_1$ e $t_2$ su ogni attributo $B \in Y$ è minore di una certa soglia $a_B$ 
 
+Nel lavoro di tesi vengono trattate solo le RFD che rilassano il vincolo di uguaglianza. Data RFD $X \xrightarrow{} Y$ essa vale su una relazione $r$ se e solo se la distanza fra due tuple $t_1$ e $t_2$, i cui valori sui singoli attributi $A_i$ non superano una certa soglia $\beta_i$, è inferiore ad una certa soglia $a_A$ su ogni attributo $A \in X$, allora la distanza fra $t_1$ e $t_2$ su ogni attributo $B \in Y$ è minore di una certa soglia $a_B$.\\
+La struttura delle RFD utilizzate è la seguente:
+\newline
+\newline
+\centerline{$attr_1(\leq soglia_1),\ldots$,$attr_n(\leq soglia_n) \xrightarrow{} RHS$}
 
-
+Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS\footnote{Left Hand Size o lato sinistro}, l'attributo che invece si trova dopo la freccia costituisce l'RHS\footnote{Right Hand Size o lato destro}. 
+È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante le RFD , bensì riguarda qualsiasi tipo di Dipendenza Funzionale
+Ad esempio consideriamo la relazione in questa tabella:
+\\
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l |l |l |l |l }
+     Impiegato & Stipendio & Progetto & Bilancio & Funzione \\
+    \hline
+    Rossi & 20000  & Sito web & 2000 & tecnico\\
+    Verdi & 35000 & App Mobile & 15000 & progettista\\
+    Verdi & 35000 & Server & 15000 & progettista\\
+    Neri & 55000 & Server & 15000 & direttore\\
+    Neri & 55000 & App Mobile & 15000 & consulente\\
+    Neri & 55000 & Sito web & 2000 & consulente\\
+    Mori & 48000 & Sito web & 15000 & direttore\\
+    Mori & 48000 & Server & 15000 & progettista\\
+    Bianchi & 48000 & Server & 15000 & progettista\\
+    Bianchi & 48000 & App Mobile & 15000 & direttore\\
+    \end{tabular}
+    \caption{Esempio di Relazione con anomalie}
+    \label{tab:abc}
+\end{table}
+Si può osservare che lo stipendio di ciascun impiegato è unico, quindi in ogni tupla in cui compare lo stesso impiegato verrà riportato lo stesso stipendio. Possiamo dire che esiste una Dipendenza Funzionale 
+$Impiegato \xrightarrow{} Stipendio$
+Si può fare lo stesso discorso tra gli attributi Progetto e Bilancio, quindi anche qui abbiamo una dipendenza funzionale
+$Progetto\xrightarrow{}Bilancio$
+Non si può dire che di conseguenza vale anche il verso opposto:
+\\
+\centerline{$Impiegato \xrightarrow{} Stipendio \neq Stipendio \xrightarrow{} Impiegato$} \\
+Infatti percepiscono 48000 di stipendio sia Mori che Bianchi.
 \section{Software di ricerca di RFD}
 Il software sviluppato per funzionare necessita di una lista di RFD, prese in input da file. Nel caso in cui questa lista non sia disponibile, ci si avvale di un algoritmo di ricerca.
 L’algoritmo è stato sviluppato durante il corso di Intelligenza Artificiale dell’anno 2016/2017.
@@ -107,24 +141,33 @@ per ogni $A \in X$ si cerca di controllare se la $FD$  $X\setminus A \xrightarro
 
 Principalmente di questo software è stato studiato cosa prende in input e cosa restituisce in output
 
-Input
-Il programma prende in input un dataset in formato csv.
-Il dataset possiede una prima riga che funge da header, ogni nome di attributo è separato da un carattere speciale \footnote{Solitamente viene utilizzato il simbolo  ;  }
+\subsection{Input}
+Il programma prende in input un Dataset in formato csv.
+Il Dataset possiede una prima riga che funge da header, ogni nome di attributo è separato da un carattere speciale \footnote{Solitamente viene utilizzato il simbolo  ;  }
 Ogni riga del file csv costituisce una tupla.
 
-Output
-Una volta eseguito l’algoritmo di ricerca l’output, ossia le RFD trovate, vengono stampate sul terminale. Le RFD sono raggruppate utilizzando come pivot l’attributo che si trova nel lato RHS della RFD. Il software restituisce le RFD in due formati:
-Il primo è sotto forma di Pandas Dataframe
+\subsection{Output}
+Una volta eseguito l’algoritmo di ricerca l’output, ossia le RFD trovate, vengono stampate sul terminale. Le RFD sono raggruppate utilizzando come pivot l’attributo che si trova nel lato RHS\footnote{Per RHS si intende il lato destro di una dipendenza funzionale rilassata} della RFD. Il software restituisce le RFD in due formati:
+Il primo è sotto forma di Pandas Dataframe:
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l  l  l  l  l }
+     RHS & $attr_1$ & $attr_1$ &$attr_{\ldots}$ & $attr_n$ \\
+    \hline
+    0 & $v_{11}$ & $v_{12}$ & $v_{1\ldots}$ & $v_{1n}$\\
+    1 & $v_{21}$ & $v_{22}$ & $v_{2\ldots}$ & $v_{2n}$\\
+    $\ldots$ & $v_{\ldots1}$ & $v_{\ldots2}$ & $v_{\ldots}$ & $v_{\ldots n}$\\
+    m & $v_{m1}$ & $v_{m2}$ & $v_{m\ldots}$ & $v_{mn}$\\
+    \end{tabular}
+    \caption{Pandas Dataframe}
+    \label{tab:abc}
+\end{table}
 
-	RHS	attr1	attr...	attrN
-0	v11	v12	v..	v1n
-1	v21	v22	v..	v2n
-…	…	…	…	...
-n	vm1	vm2	v..	vmn
 
 Nel caso in cui si avvia il programma specificando l’opzione “-human” si ottengono le RFD nel seguente formato:
-attr_1(<=soglia_1),...,{attr_n}(<=soglia_n)->RHS(<=soglia_rhs)
+\\
+\\
+\centerline{$attr_1(\leq soglia_1),attr_2(\leq soglia_2),\ldots,{attr_n}(\leq soglia_n)->RHS(\leq soglia_{rhs})$}
+\\
 
-
-I tempi di esecuzione di questi algoritmo di ricerca sono abbastanza elevati, già con dataset che superano il migliaio di righe i tempi non si misurano più in ore ma in giorni. Inoltre abbiamo notato che con dataset costituiti da poche righe ma da molti attributi i tempi di calcolo diventano sempre più elevati.
-
+I tempi di esecuzione di questo algoritmo di ricerca sono abbastanza elevati, già con Dataset che superano il migliaio di righe i tempi non si misurano più in ore ma in giorni. Inoltre abbiamo notato che con Dataset costituiti da poche righe ma da molti attributi i tempi di calcolo aumentano esponenzialmente.
