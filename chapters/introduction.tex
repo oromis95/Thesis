@@ -94,7 +94,7 @@ Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS
 È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante le RFD , bensì riguarda qualsiasi tipo di Dipendenza Funzionale
 Ad esempio consideriamo la relazione in questa tabella:
 \\
-\begin{table}[h]
+\begin{table}[H]
     \centering
     \begin{tabular}{l |l |l |l |l }
      Impiegato & Stipendio & Progetto & Bilancio & Funzione \\
@@ -111,7 +111,7 @@ Ad esempio consideriamo la relazione in questa tabella:
     Bianchi & 48000 & App Mobile & 15000 & direttore\\
     \end{tabular}
     \caption{Esempio di Relazione con anomalie}
-    \label{tab:abc}
+    \label{tab:relationship_anomalies}
 \end{table}
 Si può osservare che lo stipendio di ciascun impiegato è unico, quindi in ogni tupla in cui compare lo stesso impiegato verrà riportato lo stesso stipendio. Possiamo dire che esiste una Dipendenza Funzionale 
 $Impiegato \xrightarrow{} Stipendio$
@@ -120,7 +120,7 @@ $Progetto\xrightarrow{}Bilancio$
 Non si può dire che di conseguenza vale anche il verso opposto:
 \\
 \centerline{$Impiegato \xrightarrow{} Stipendio \neq Stipendio \xrightarrow{} Impiegato$} \\
-Infatti percepiscono 48000 di stipendio sia Mori che Bianchi.
+Infatti percepiscono 48000 di stipendio sia Mori che Bianchi.\cite{libroCeri}
 \section{Software di ricerca di RFD}
 Il software sviluppato per funzionare necessita di una lista di RFD, prese in input da file. Nel caso in cui questa lista non sia disponibile, ci si avvale di un algoritmo di ricerca.
 L’algoritmo è stato sviluppato durante il corso di Intelligenza Artificiale dell’anno 2016/2017.
@@ -134,7 +134,7 @@ Inizialmente si genera un grafo di attributi, definito in una struttura a lattic
 \item livello …..
 \item livello n: contiene tutto l’insieme di attributi.
 \end{itemize}
-Ogni sottoinsieme contenuto in uno di questi livelli è canditato per una possibile RFD.
+Ogni sottoinsieme contenuto in uno di questi livelli è candidato per una possibile RFD.
 L’algoritmo parte del livello 0 , e per ogni livello controlla per tutti i sottoinsiemi $X \in L_r$ ,l’esistenza di dipendenze funzionali.
 Il funzionamento preciso è definito da:
 per ogni $A \in X$ si cerca di controllare se la $FD$  $X\setminus A \xrightarrow{}  A $ vale. Questo tipo di algoritmo ha complessità esponenziale.
@@ -147,7 +147,7 @@ Il Dataset possiede una prima riga che funge da header, ogni nome di attributo �
 Ogni riga del file csv costituisce una tupla.
 
 \subsection{Output}
-Una volta eseguito l’algoritmo di ricerca l’output, ossia le RFD trovate, vengono stampate sul terminale. Le RFD sono raggruppate utilizzando come pivot l’attributo che si trova nel lato RHS\footnote{Per RHS si intende il lato destro di una dipendenza funzionale rilassata} della RFD. Il software restituisce le RFD in due formati:
+Una volta eseguito l’algoritmo di ricerca l’output, ossia le RFD trovate, viene stampato sul terminale. Le RFD sono raggruppate utilizzando come pivot l’attributo che si trova nel lato RHS\footnote{Per RHS si intende il lato destro di una dipendenza funzionale rilassata} della RFD. Il software restituisce le RFD in due formati:
 Il primo è sotto forma di Pandas Dataframe:
 \begin{table}[h]
     \centering
@@ -160,7 +160,7 @@ Il primo è sotto forma di Pandas Dataframe:
     m & $v_{m1}$ & $v_{m2}$ & $v_{m\ldots}$ & $v_{mn}$\\
     \end{tabular}
     \caption{Pandas Dataframe}
-    \label{tab:abc}
+    \label{tab:pandas_dataframe}
 \end{table}
 
 
