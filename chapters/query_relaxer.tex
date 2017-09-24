@@ -1,19 +1,86 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse hendrerit eros quis ornare malesuada. Cras pretium metus velit, ut dignissim ligula interdum et. Suspendisse et magna risus. Mauris lorem mauris, porta non dolor a, fermentum ultricies nulla. Nam vestibulum mi ante, a scelerisque massa consectetur quis. Praesent pharetra maximus augue, at placerat mauris scelerisque sit amet. Vestibulum egestas, nisl non elementum rhoncus, mauris neque fermentum ipsum, blandit blandit augue turpis id lectus. Quisque porta bibendum ex, quis pretium turpis auctor ac. Nam in est et eros scelerisque dignissim nec ac ex. Proin scelerisque sapien viverra tortor hendrerit eleifend.
-\begin{table}[]
+\section{Algoritmo Progettato}
+In questa sezione saranno illustrati sequenzialmente i passi effettuati dal software. I passi sono  seguenti:
+\begin{itemize}[noitemsep]
+    \item Caricamento dataset
+    \item Caricamento lista RFD
+    \item Ordinamento delle RFD
+    \item Query Estesa
+    \item Query Rilassata
+    \item Query Estesa
+\end{itemize}
+\paragraph{Caricamento Dataset}
+Il primo passo da effettuare è quello di caricare il Dataset in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il dataset può contenere vari tipi di dati: float, int, stringhe e date.
+La struttura dati utilizzata per contenere i dati è quella del pandas.Dataframe , contenuta nel package Pandas\footnote{Pandas è una libreria software scritta per il linguaggio di programmazione Python .È adibita alla manipolazione e l'analisi dei dati. In particolare, offre strutture e operazioni di dati per la manipolazione di tabelle numeriche e di serie temporali. }. \\Il Dataframe di Pandas è una struttura dati tabulare bidimensionale variabile in formato, potenzialmente eterogenea e con assi etichettati (righe e colonne). Le operazioni vengono effettuate sulle rige e sulle colonne. 
+\paragraph{Carimento lista RFD}
+Il secondo passo consiste nel caricare la lista di RFD. L'utente può passare il path del file contenente le RFD, altrimenti viene invocato un algoritmo di ricerca di RFD sul Dataset indicato.
+Nel caso in cui venga passato il path, il formato del file deve essere di tipo csv, con carattere di separazione uguale a ";".
+Dato che ogni RFD può avere un attributo diverso come parte RHS , si è scelto di utilizzare una particolare notazione:
+\begin{table}[H]
     \centering
-    \begin{tabular}{l |l |l }
-    A & B & C \\
-    \hline
-    1 & 2 & 3\\
-    4 & 5 & 6
+    \begin{tabular}{l l l l l }
+     RHS & $attr_1$ & $attr_2$ & $attr_{\ldots}$ & $attr_n$ \\
+    $attr_{k}$ & $s_{12}$ & $s_{13}$ & $s_{\ldots}$ & $s_1n$  \\
+    $attr_{j}$ & $s_{22}$ & $s_{23}$  & $s_{\ldots}$ & $s_{2n}$\\
+    $attr_{p}$ & $s_{\ldots1}$ & $s_{\ldots3}$  & $s_{\ldots}$ & $attr_{r}$\\
+    $s_{m1}$ & $s_{m2}$ & $s_{m3}$ & $s_{\ldots}$ & $s_{mn}$\\
     \end{tabular}
-    \caption{very basic table}
-    \label{tab:abc}
+    \caption{Pandas Dataframe contenente le soglie delle RFD}
+    \label{tab:RFD_notation}
 \end{table}
-Cras scelerisque turpis dui, vitae sagittis orci pharetra non. Donec facilisis ex et turpis bibendum, quis tristique nulla consectetur. Nulla facilisi. Pellentesque eu sagittis nisi, eu egestas erat. Quisque sodales luctus blandit. Sed finibus sapien sit amet eros scelerisque cursus vel cursus enim. Cras sagittis elit felis, ac blandit arcu faucibus eu. Sed ullamcorper mi sit amet rutrum sollicitudin. Integer sodales consequat ligula, in pharetra nulla pellentesque sit amet. Donec pharetra elit pellentesque pretium tincidunt.
 
-Aliquam erat volutpat. Quisque quis elit tellus. Integer et efficitur dolor. Duis faucibus lectus sed nibh rutrum, nec imperdiet nisl pulvinar. In pellentesque nisi vitae mi imperdiet posuere. Morbi consequat, sem ut iaculis luctus, purus nibh sagittis erat, ornare scelerisque nunc lorem eu mauris. Aenean elementum enim eget dolor blandit, ac laoreet dolor convallis. Duis et ante ut urna vehicula sodales id ac purus. Proin lacinia convallis porttitor. Quisque sit amet enim aliquam, consequat urna id, elementum magna. Suspendisse augue enim, imperdiet elementum bibendum a, posuere a elit.
-
-Aliquam eu diam dignissim eros sagittis ultrices. Sed eu laoreet lacus. Duis odio turpis, iaculis et nisl eu, tempor interdum eros. Vivamus cursus condimentum quam sit amet tristique. Nulla facilisi. Curabitur nibh sem, suscipit et pretium vitae, efficitur at sem. Praesent nunc est, malesuada a rhoncus vel, tincidunt a ligula. Cras ullamcorper lectus vel blandit lobortis. Nullam quis ipsum luctus, porta dui ut, ornare arcu.
-
-Aliquam ante odio, egestas id elit eu, condimentum faucibus metus. Morbi sollicitudin eu diam non vestibulum. Nullam vel massa odio. Maecenas ornare, neque eget auctor finibus, nulla nunc vehicula enim, et posuere purus metus quis libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi tempus sit amet nibh eu luctus. In ipsum ipsum, pellentesque nec suscipit ut, vehicula euismod magna. Donec cursus ipsum id urna vulputate faucibus. Maecenas sollicitudin ante a lacinia facilisis. Fusce tincidunt neque non est suscipit, vel consequat magna varius. Sed pharetra, eros a luctus finibus, nunc urna bibendum libero, non malesuada massa urna eu tortor.
+La prima colonna del Dataframe contiene non una soglia bensì il nome dell'attributo che funge da RHS in quella RFD.
+\\
+Se l'utente non fornisce il path del file, o il file non viene trovato, il software richiama l'algoritmo di ricerca delle RFD. Viene passato all'algoritmo di RFDD\footnote{Relaxed Functional Dependencies Discovery} il path del dataset, l'algoritmo dopo aver elaborato restituisce una Dataframe contenente le RFD, le quali vengono salvate su file e dopodichè caricate in memoria.
+\paragraph{Ordinamento delle RFD}
+Una volta caricata la lista di query è necessario effettuare una pulizia sui dati.
+Vengono eliminate le RFD che valore "Nan" su attributi che sono presenti nella query, dopodiché vengono eliminate le RFD dove nel lato RHS è presente un attributo della query \footnote{Utilizzare una RFD di questo tipo significherebbe utilizzare una dipendenza funzionale rilassata banale, la quale non porta alcuna informazione aggiuntiva}
+Dopo aver effettuato questa pulizia le RFD vengono ordinate. 
+\newline
+C'è stata molta indecisione riguardo l'implementazione dell'ordinamento, in quanto non è stata trovata una dimostrazione formale che ci indicasse quale metodo fosse il più efficace.
+L'obiettivo è stato quello di trovare un algoritmo che ordinasse le RFD dando precedenza a quelle che producono Result Set non troppo ampi.
+\\
+Dopo vari test abbiamo pervenuto che il metodo più efficacie fosse quello di ordinare le RFDs prima in ordine decrescente rispetto al numero di attributi con valore "Nan" e poi in ordine crescente di soglia rispetto agli attributi presenti nella query. 
+L'ordinare secondo soglie più piccole indica che quelle RFD agiscono su range ridotti, indicativamente ciò significa che in dato rispetto ad un range più ampio un range di dimensioni ridotte include meno dati .In realtà può capitare che in un Dataset vi sia un aggregazione di dati un piccolo range superiore a tutti gli altri dati presenti nel Dataset, ad esempio preso un Dataset che possiede un attributo altezza possiamo avere i seguenti valori
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l }
+    altezza \\
+    170 \\
+    171 \\
+    172 \\
+    171 \\
+    169 \\
+    170 \\
+    173 \\
+    170 \\
+    169 \\
+    158 \\
+    165 \\
+    152 \\
+    \end{tabular}
+    \caption{Esempio di valori su attributo altezza}
+    \label{tab:height_list}
+\end{table}
+In questo caso se abbiamo due range $[169,172]$ e $[140,165]$, l'intuizione ci dice che il primo range essendo il più piccolo dovrebbe includere meno dati, invece guardando dalla lista si può notare che il primo range contiene 8 valori ed il secondo solo 3.
+Ciò capita abbastanza raramente , infatti nei test effettuati questo principio di ordinamento ha restituito quasi sempre i risultati migliori.
+Per aumentare l'efficacia dell'ordinamento abbiamo ritenuto necessario dare precedenza alle RFD che nel lato LHS possiedono un numero di attributi il più simile possibile agli attributi presenti nella query.
+Nella tabella sottostante viene mostrata parte della lista di RFD ordinata:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l l l l l l l}
+        & RHS & age & height & shoe{\_}size & weight \\
+    0 & shoe{\_}size & NaN & 0.0 & 1.0 & NaN \\
+    1 & weight & NaN & 0.0 & 0.0 & 1.0 \\
+    2 & shoe{\_}size & 3.0 & 0.0 & 0.0 & NaN \\
+    3 & weight & 6.0 & 1.0 & NaN & 4.0 \\
+    4 & weight & NaN & 1.0 & 1.0 & NaN \\
+    5 & shoe{\_}size & 6.0 & 1.0 & 1.0 & NaN \\
+    6 & shoe{\_}size & NaN & 1.0 & 1.0 & 4.0 \\
+    7 & shoe{\_}size & NaN & 1.0 & 0.0 & 2.0 \\
+    8 & age & 6.0 & 1.0 & 0.0 & NaN \\
+    9 & age & 5.0 & 1.0 & 1.0 & NaN \\
+    \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+    \end{tabular}
+    \caption{Parte di una lista di RFD ordinata}
+    \label{tab:ord_rdf}
+\end{table}
