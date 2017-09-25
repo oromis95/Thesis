@@ -176,7 +176,7 @@ La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcun
 
 \subsection{Package io}
 In questo package sono contenuti diversi moduli divisi in baso al loro scopo.
-Il primo contenuto nella sottocartela csv comprende:
+Il contenuto nella sottocartela csv comprende:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item csv{\_}parser.py
@@ -185,15 +185,21 @@ Il primo contenuto nella sottocartela csv comprende:
 
 \paragraph{csv{\_}parser.py}
 Questo modulo contiene la classe CSV Parser che si occupa di prendere i dati dai file CSV e salvarli in un dataframe, il tutto viene fatto nel metodo init.
-\begin{lstlisting}[language=Python]
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
 class CSVParser:
-        def __init__(self, csv_path: str):
-            self.path = csv_path
-            self.delimiter = self.__guess_delimiter()
-            self.data_frame = pd.read_csv(self.path, delimiter=self.delimiter)
-            self.rows_count, self.columns_count = self.data_frame.shape
-            self.header = list(self.data_frame)
-\end{lstlisting}
+    def __init__(self, csv_path: str):
+        self.path = csv_path
+        self.delimiter = self.__guess_delimiter()
+        self.data_frame = pd.read_csv(self.path, 
+                                delimiter=self.delimiter)
+        self.rows_count, self.columns_count = self.data_frame.shape
+        self.header = list(self.data_frame)
+\end{minted}
+\caption{Class CSVParser}
+\label{Code:1}
+\end{listing}
+L'operazione vera e propria di parsing e loading dei dati viene delegata al Framework Pandas, richiamando il metodo alla riga 5
 Le variabili di questa classe sono:
 \begin{itemize}[noitemsep]
     \item path:[str] Contiene il path del file CSV
@@ -203,3 +209,93 @@ Le variabili di questa classe sono:
     \item column{\_}count:[int]contiene il numero di colonne contenute nel file CSV
     \item header:[list] contiene una lista di valori che fungono da header, questi valori sono specificati nella prima riga del file csv
 \end{itemize}
+L'unico argomento da passare al costruttore è il path del file, tutti gli altri dati vengono calcolati. 
+All'interno del costruttore è presente una chiamata al metodo {\_\_}guess{\_}delimiter:
+
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+    def __guess_delimiter(self):
+\end{minted}
+\caption{Guess delimiter}
+\label{Code:2}
+\end{listing}
+
+Questo metodo ha il compito di indovinare il carattere di separazione leggendo il file.
+
+\paragraph{io.py}
+Questo modulo contiene la classe CSVInputOutput la quale si occupa di importare/esportare una Pandas.Dataframe da/in un file CSV
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+    class CSVInputOutput:
+\end{minted}
+\caption{CSVInputOutput}
+\label{Code:3}
+\end{listing}
+Le variabili di questa classe sono:
+\begin{itemize}[noitemsep]
+    \item sep:[str] campo contenente il simbolo di separazione utilizzato nei file CSV
+    \item na{\_}rep:[str] campo contenente il simbolo che rappresenta un dato mancante 
+    \item index:[boolean] flag che indica se si vuole stampare nel file csv gli indici di riga
+    \item encoding:[str] campo contente la codifica dei file input/output
+    \item date{\_}format:[str] campo contente il formato delle date
+\end{itemize}
+Questa classe possiede due metodi.
+Il primo è il metodo store
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+    def store(self, df: pd.DataFrame, path: str):
+\end{minted}
+\caption{store method}
+\label{Code:4}
+\end{listing}
+Questo metodo prende in input il path del del file in cui andare a salvare il DataFrame
+
+Il secondo è il metodo load
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+    def load(self, path: str) -> pd.DataFrame:
+\end{minted}
+\caption{load method}
+\label{Code:5}
+\end{listing}
+Il metodo prende in input il path del file e delegando a Pandas Dataframe esegue il parsing e il loading
+
+
+La seconda sottocartella rfd contiene vari moduli inerenti alla manipolazione delle RFD:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item rfd{\_}extractor.py
+    \item store{\_}and{\_}load.py
+\end{itemize}
+
+\paragraph{rfd{\_}extractor.py}
+È contiene la classe RFDExtractor che si occupa di estrarre le RFD da un dataset
+rfd{\_}extractor.py
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+class RFDExtractor:
+    ...
+    def __init__(self, args, debug_mode=False) -> None:
+    ...
+    def __str__(self) -> str:
+    ...
+    def extract_args(self, args):
+    ...
+    def extract_hss(self, cols_count, lhs, rhs):
+    ...
+    def extract_sep_n_header(self, c_sep, csv_file, has_header):
+    ...
+    def check_correctness(self, has_dt, hss, index_col):
+    ...
+    def usage(self):
+    ...
+    def print_human(self, rfd_data_frame: pd.DataFrame):
+    ...
+    def get_rfd_dictionary_list(self) -> list:
+    ...
+\end{minted}
+\caption{RFDExtractor}
+\label{Code:6}
+\end{listing}
+
+Non saranno fornite particolari informazioni su questa classe , in quanto essa fa semplicemente da wrapping all'algoritmo di ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
