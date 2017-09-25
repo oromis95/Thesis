@@ -6,7 +6,6 @@ In questa sezione saranno illustrati sequenzialmente i passi effettuati dal soft
     \item Ordinamento delle RFD
     \item Query Estesa
     \item Query Rilassata
-    \item Query Estesa
 \end{itemize}
 \paragraph{Caricamento Dataset}
 Il primo passo da effettuare è quello di caricare il Dataset in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il dataset può contenere vari tipi di dati: float, int, stringhe e date.
@@ -64,11 +63,12 @@ L'ordinare secondo soglie più piccole indica che quelle RFD agiscono su range r
 In questo caso se abbiamo due range $[169,172]$ e $[140,165]$, l'intuizione ci dice che il primo range essendo il più piccolo dovrebbe includere meno dati, invece guardando dalla lista si può notare che il primo range contiene 8 valori ed il secondo solo 3.
 Ciò capita abbastanza raramente , infatti nei test effettuati questo principio di ordinamento ha restituito quasi sempre i risultati migliori.
 Per aumentare l'efficacia dell'ordinamento abbiamo ritenuto necessario dare precedenza alle RFD che nel lato LHS possiedono un numero di attributi il più simile possibile agli attributi presenti nella query.
-Nella tabella sottostante viene mostrata parte della lista di RFD ordinata:
+Nella tabella sottostante viene mostrata parte di una lista di RFD ordinata \footnote{L'ordinamento è stato effettuato in base ad una query eseguita dall'utente, in questo caso la query è SELECT * FROM dataset{\_}string WHERE height=169}:
 \begin{table}[H]
     \centering
     \begin{tabular}{l l l l l l l l}
         & RHS & age & height & shoe{\_}size & weight \\
+        \hline
     0 & shoe{\_}size & NaN & 0.0 & 1.0 & NaN \\
     1 & weight & NaN & 0.0 & 0.0 & 1.0 \\
     2 & shoe{\_}size & 3.0 & 0.0 & 0.0 & NaN \\
@@ -84,3 +84,122 @@ Nella tabella sottostante viene mostrata parte della lista di RFD ordinata:
     \caption{Parte di una lista di RFD ordinata}
     \label{tab:ord_rdf}
 \end{table}
+
+\paragraph{Query Estesa}
+D'ora in poi tutta la procedura descritta da qui in avanti verrà iterata per un numero di RFD pari ad un valore definito dall'utente. \footnote{In caso in cui l'utente lasci il campo vuoto, l'iterazione viene effettuata per ogni RFD presente nella lista}
+Viene selezionata la i-esima RFD con $i\in[1,n]$. 
+Si vanno a considerare gli attributi della RFD che siano presenti nella query\footnote{In questo momento si considerano solo gli attributi in LHS}, si prendono le soglie e si effettua una nuova una query estesa $Q_2$
+Ad esempio supponendo che la query iniziale sia: \\~\\ \centerline{SELECT * FROM dataset{\_}string WHERE height=169} \\~\\ e che la RFD selezionata sia: \\~\\ \centerline{$(height \leq 0.0)  \rightarrow(shoe_size \leq 0.0)$} \\~\\
+Viene effettuato un controllo sul tipo di valori degli attributi della query,
+si vanno a identificare string, int e float, questa identificazione serve a specificare quale funzione di distanza bisogna applicare durante l'estensione della query.
+Dato che height è un attributo di tipo numerico, si vanno a prendere tutti i valori che differiscono di 0 dal valore iniziale inserito dall'utente. In questo caso la query estesa $Q_2$ resta uguale a $Q_1$: \newline 
+\centerline{SELECT * FROM dataset{\_}string WHERE height =169} \newline
+Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dall query iniziale
+In questo caso entrambe le query restituiscono questo risultato: \newline 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l l l l l l l}
+    n.row   & height & weight & shoe{\_}size & age \\
+    \hline
+    5 & 169 & 73 & 38 & 49 \\
+
+    \end{tabular}
+    \caption{Result Set restituito sia dalla query $Q_1$ e sia dalla query $Q_2$ }
+    \label{tab:sta_ext_result_set}
+\end{table}
+
+\paragraph{Query Rilassata}
+In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata (vedi Appendice [perfezionamento con lhs]).
+Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati \footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
+Per ogni set vengono rilassati i valori in base alle soglie contenute nella RFD, i risultato sarà una serie si SET che contengono dei range più ampi.
+È quindi possibile effettuare k query rilassate, ottenendo vari Result Set. La loro unione andrà a costituire il Result Set finale che sarà restituito in output.
+Riprendendo l'esempio riportato nel paragrafo precedente, vengono raccolti i dati sui valori presenti in RHS, in questo caso vi è solo l'attributo shoe{\_}sie \footnote{In realtà in RHS vi è sempre un unico attributo, la query viene rilassata con più attributi in quanto si esegue un perfezionamento vedi  Appendice [perfezionamento combinazioni]} che viene rilassato di una soglia pari a 0. Dato che la query estesa $Q_2$ ha restituito una sola tupla, verrà rilassato un unico valore. La query rilassata $Q_3$  è : \newline 
+\centerline{SELECT * FROM dataset{\_}string WHERE shoe{\_}size=38}
+\newline
+Per la proprietà delle RFD (vedi Appendice Proprietà RFD) il Result Set restituito sarà $\geq$ del Result Set restituito dalla query estesa $Q_2$.
+
+In questo caso il Result Set è uguale a :
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l l l l l l l}
+    n.row  & height & weight & shoe{\_}size & age \\
+    \hline
+    0  & 175 & 75 & 39 & 41 \\
+    1  & 169 & 73 & 38 & 49 \\
+    2  & 170 & 65 & 39 & 30 \\
+    \end{tabular}
+    \caption{Result Set restituito sia dalla query $Q_3$ }
+    \label{tab:relax_result_set}
+\end{table}
+
+Dato che questa procedura viene effettuata per un numero N di RFD, viene effettuato un confronto in modo tale da restituire il Result Set che che sia il meno ampio possibile \footnote{Vengono scartati i Result Set che hanno cardinalità uguale ad Result Restituito dalla query iniziale}
+
+\section{Struttura del Progetto}
+Il progetto è incluso in una cartella contenente anche il software di ricerca di RFD, tutto il codice sviluppato è contenuto nella sottocartella query{\_}rewriter
+\begin{figure}[H]
+    \centering
+    \includegraphics{struct_project.png}
+    \caption{Struttura del Progetto}
+    \label{fig:struct_project}
+\end{figure}
+
+\subsection{Package Dataset}
+Il package Dataset include una serie di Dataset in formato csv ed una cartella contente le rispettive liste di RFD già precalcolate. 
+I Dataset inclusi nel progetto sono:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item cars.csv
+    \item cars2.csv
+    \item cars{\_}db.csv
+    \item cora.csv
+    \item crawled-tweets.csv
+    \item dataset.csv
+    \item dataset{\_}string.csv
+    \item dataset{\_}string2.csv
+    \item echocardiogram.csv
+    \item iris.csv
+    \item restaurant
+\end{itemize}
+
+Sono state già calcolate le seguenti liste di RFD:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item cars{\_}db{\_}rfds.csv
+    \item cars{\_}rfds.csv
+    \item cora{\_}rfds.csv
+    \item dataset{\_}rdfs.csv
+    \item dataset{\_}strng{\_}rdfs.csv
+\end{itemize}
+
+
+La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa
+
+\subsection{Package io}
+In questo package sono contenuti diversi moduli divisi in baso al loro scopo.
+Il primo contenuto nella sottocartela csv comprende:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item csv{\_}parser.py
+    \item io.py
+\end{itemize}
+
+\paragraph{csv{\_}parser.py}
+Questo modulo contiene la classe CSV Parser che si occupa di prendere i dati dai file CSV e salvarli in un dataframe, il tutto viene fatto nel metodo init.
+\begin{lstlisting}[language=Python]
+class CSVParser:
+        def __init__(self, csv_path: str):
+            self.path = csv_path
+            self.delimiter = self.__guess_delimiter()
+            self.data_frame = pd.read_csv(self.path, delimiter=self.delimiter)
+            self.rows_count, self.columns_count = self.data_frame.shape
+            self.header = list(self.data_frame)
+\end{lstlisting}
+Le variabili di questa classe sono:
+\begin{itemize}[noitemsep]
+    \item path:[str] Contiene il path del file CSV
+    \item delimiter:Contiene il carattere di separazione
+    \item data{\_}frame:[Pandas Dataframe] Contiene i dati del file CSV letto
+    \item rows{\_}count:[int]contiene il numero di righe contenute nel file CSV
+    \item column{\_}count:[int]contiene il numero di colonne contenute nel file CSV
+    \item header:[list] contiene una lista di valori che fungono da header, questi valori sono specificati nella prima riga del file csv
+\end{itemize}
