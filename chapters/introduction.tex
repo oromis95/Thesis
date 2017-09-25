@@ -1,7 +1,7 @@
 \section{Incipit}
 
 In un modello relazionale, la scoperta dipendenza funzionali assume un ruolo importante durante la progettazione o normalizzazione. Già da molto queste dipendenze vengono utilizzate per migliorare la qualità dei database.
-Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, che siano provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposta un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD) per catturare delle consistenze più ampie nei dati.
+Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, che siano provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposta un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD) \footnote{In tutta la tesi Dipendenze Funzionali Approssimate e Dipendenze Funzionali Rilassate indicano lo stesso concetto} per catturare delle consistenze più ampie nei dati.
 Una volta individuate, queste RFD possono essere utilizzate in data cleaning sia in sistemi di query approssimate. Nei sistemi di query sorgono problemi quando effettuata l'interrogazione viene restituita una risposta vuota o non soddisfacente. In questi casi potrebbe interessare non solo gli elementi che combaciano esattamente con la query , ma anche quelli simili, se però possiedono qualche legame con la query. Un modo per effettuare questa operazione è quello di utilizzare una RFD.
 Un sistema di Query Relaxation (basato su AFD) ,che non utilizza solo un semplice ampliamento dei range di ricerca , può essere di estrema utilità in un qualsiasi motore di ricerca in quanto riesce a trovare delle associazioni nascoste fra le varie tuple del database.
 
@@ -34,15 +34,13 @@ Uno schema di relazione è costituito da un simbolo $R$, detto nome della relazi
 con $R(X)$. A ciascun attributo $A \in X$ e associato un dominio $dom(A)$.
 Uno schema di base di dati è un insieme di schemi di relazione con nomi
 diversi:
-\\
-\\
+\\~\\
 \centerline{$R = \{ R_1(X_1),R_2(X_2),...,R_n(X_n)\}$.}
-\\
-\\
+\\~\\
 Una relazione su uno schema $R(X)$ e un insieme $r$ di tuple su $X$. Per
 ogni istanza $r \in R(X)$, per ogni tupla $t \in r$ e per ogni attributo $A \in X$,
 $t[A]$ rappresenta la proiezione di $A$ su $t$. In modo analogo, dato un insieme
-di attributi $Y \subseteq X$, $t[Y]$ rappresenta la proiezione di $Y$ su $t$.
+di attributi $Y \subseteq X$, $t[Y]$ rappresenta la proiezione di $Y$ su $t$.\cite{libroCeri}
 \subsection{Dipendenze funzionali canoniche}
 Data una relazione $r$ su uno schema $R(X)$ e due sottoinsiemi di attributi non vuoti $Y$ e $Z$ di $X$,diremo che esiste su $r$ una dipendenza funzionale tra gli attributi $Y$ e $Z$, se, per ogni coppia di tuple $t_1$ e $t_2$ di $r$ aventi gli stessi valori sugli attributi $U$, risulta che $t_1$ e $t_2$ hanno gli stessi valori anche sugli attributi $Z$.
 Generalmente indichiamo una dipendenza funzionale tra gli attributi $Y$ e $Z$ con la notazione $Y->Z$ e viene associata ad uno schema
@@ -67,11 +65,9 @@ data cleaning, record matching e di rilassamento delle query.
 Le definizione formale di una RFD è la seguente:
 \begin{theorem}
 Sia $R$ uno schema relazionale definito su di un insieme di attributi finito, e siano $R_1=(A_1,A_2,...,A_k)$ e $R_2=(B_1,B_2,...,B_m)$ due schemi relazionali definiti su $R$. Una RFD $\varphi$ su $R$ viene rappresentata come:
-\\
-\\
+\\~\\
 \centerline{$D_{c_1} \times D_{c_2}:(X_1,X_2)_{\Phi_1} \xrightarrow{\Psi\geq\epsilon}(Y_1,Y_2)_{\Phi_2}$}
-\\
-\\
+\\~\\
 dove 
 \begin{itemize}
 \item $\mathbb{D}_{c_1}\times \mathbb{D}_{c_2} = \{(t_1,t_2)\in dom(R_1)\times dom(R_2)|(\bigwedge_{i=1}^{k} c_{1_i}(t_1[A_i])) \bigwedge_{j=1}^{m} c_{2_j}(t_2[B_j])$, dove $c_{1_i}$ e $c_{2_j}$ sono dei predicati sul $dom(A_i)$ e $dom(B_j)$ rispettivamente, utilizzati per filtrare le tuple a cui $\varphi$ va applicata.
@@ -83,11 +79,89 @@ $c_{1_i}(t_1[A_i])$ dà vero se il predicato $c_1$, sull'attributo $A_i$ restitu
 \end{itemize}
 \end{theorem}
 
-Nel lavoro di tesi vengono trattate solo le RFD che rilassano il vincolo di uguaglianza. Data RFD $X \xrightarrow{} Y$ essa vale su una relazione $r$ se e solo se la distanza fra due tuple $t_1$ e $t_2$, i cui valori sui singoli attributi $A_i$ non superano una certa soglia $\beta_i$, è inferiore ad una certa soglia $a_A$ su ogni attributo $A \in X$, allora la distanza fra $t_1$ e $t_2$ su ogni attributo $B \in Y$ è minore di una certa soglia $a_B$ 
 
-
-
+Nel lavoro di tesi vengono trattate solo le RFD che rilassano il vincolo di uguaglianza. Data RFD $X \xrightarrow{} Y$ essa vale su una relazione $r$ se e solo se la distanza fra due tuple $t_1$ e $t_2$, i cui valori sui singoli attributi $A_i$ non superano una certa soglia $\beta_i$, è inferiore ad una certa soglia $a_A$ su ogni attributo $A \in X$, allora la distanza fra $t_1$ e $t_2$ su ogni attributo $B \in Y$ è minore di una certa soglia $a_B$.\\
+La struttura delle RFD utilizzate è la seguente:
+\\~\\
+\centerline{$attr_1(\leq soglia_1),\ldots$,$attr_n(\leq soglia_n) \xrightarrow{} RHS$}
+\\~\\
+Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS\footnote{Left Hand Size o lato sinistro}, l'attributo che invece si trova dopo la freccia costituisce l'RHS\footnote{Right Hand Size o lato destro}. 
+È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante le RFD , bensì riguarda qualsiasi tipo di Dipendenza Funzionale
+Ad esempio consideriamo la relazione in questa tabella:
+\\
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l |l |l |l |l }
+     Impiegato & Stipendio & Progetto & Bilancio & Funzione \\
+    \hline
+    Rossi & 20000  & Sito web & 2000 & tecnico\\
+    Verdi & 35000 & App Mobile & 15000 & progettista\\
+    Verdi & 35000 & Server & 15000 & progettista\\
+    Neri & 55000 & Server & 15000 & direttore\\
+    Neri & 55000 & App Mobile & 15000 & consulente\\
+    Neri & 55000 & Sito web & 2000 & consulente\\
+    Mori & 48000 & Sito web & 15000 & direttore\\
+    Mori & 48000 & Server & 15000 & progettista\\
+    Bianchi & 48000 & Server & 15000 & progettista\\
+    Bianchi & 48000 & App Mobile & 15000 & direttore\\
+    \end{tabular}
+    \caption{Esempio di Relazione con anomalie}
+    \label{tab:relationship_anomalies}
+\end{table}
+Si può osservare che lo stipendio di ciascun impiegato è unico, quindi in ogni tupla in cui compare lo stesso impiegato verrà riportato lo stesso stipendio. Possiamo dire che esiste una Dipendenza Funzionale 
+$Impiegato \xrightarrow{} Stipendio$
+Si può fare lo stesso discorso tra gli attributi Progetto e Bilancio, quindi anche qui abbiamo una dipendenza funzionale
+$Progetto\xrightarrow{}Bilancio$
+Non si può dire che di conseguenza vale anche il verso opposto:
+\\~\\
+\centerline{$Impiegato \xrightarrow{} Stipendio \neq Stipendio \xrightarrow{} Impiegato$} 
+\\~\\
+Infatti percepiscono 48000 di stipendio sia Mori che Bianchi.\cite{libroCeri}
 \section{Software di ricerca di RFD}
-Aliquam eu diam dignissim eros sagittis ultrices. Sed eu laoreet lacus. Duis odio turpis, iaculis et nisl eu, tempor interdum eros. Vivamus cursus condimentum quam sit amet tristique. Nulla facilisi. Curabitur nibh sem, suscipit et pretium vitae, efficitur at sem. Praesent nunc est, malesuada a rhoncus vel, tincidunt a ligula. Cras ullamcorper lectus vel blandit lobortis. Nullam quis ipsum luctus, porta dui ut, ornare arcu.
+Il software sviluppato per funzionare necessita di una lista di RFD, prese in input da file. Nel caso in cui questa lista non sia disponibile, ci si avvale di un algoritmo di ricerca.
+L’algoritmo è stato sviluppato durante il corso di Intelligenza Artificiale dell’anno 2016/2017.
+L’algoritmo per scoprire le RFD è di tipo top-down \footnote{I metodi top-down effettuano una generazione di possibili FD per ogni livello e gradualmente controllano se esse si verificano}.
+Inizialmente si genera un grafo di attributi, definito in una struttura a lattice, dove vengono considerati tutti i possibili sottoinsiemi di attributi. Dato uno schema relazionale
+\\~\\ \centerline{$R=(A_1,A_2,...,A_n)$} \\~\\abbiamo che :
+\begin{itemize}[noitemsep]
+\item livello 0: non contiene alcun attributo
+\item livello 1: contiene i singleton di ogni attributi
+\item livello 2: contiene tutte le possibili coppie di attributi
+\item livello …..
+\item livello n: contiene tutto l’insieme di attributi.
+\end{itemize}
+Ogni sottoinsieme contenuto in uno di questi livelli è candidato per una possibile RFD.
+L’algoritmo parte del livello 0 , e per ogni livello controlla per tutti i sottoinsiemi $X \in L_r$ ,l’esistenza di dipendenze funzionali.
+Il funzionamento preciso è definito da:
+per ogni $A \in X$ si cerca di controllare se la $FD$  $X\setminus A \xrightarrow{}  A $ vale. Questo tipo di algoritmo ha complessità esponenziale.
 
-Aliquam ante odio, egestas id elit eu, condimentum faucibus metus. Morbi sollicitudin eu diam non vestibulum. Nullam vel massa odio. Maecenas ornare, neque eget auctor finibus, nulla nunc vehicula enim, et posuere purus metus quis libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi tempus sit amet nibh eu luctus. In ipsum ipsum, pellentesque nec suscipit ut, vehicula euismod magna. Donec cursus ipsum id urna vulputate faucibus. Maecenas sollicitudin ante a lacinia facilisis. Fusce tincidunt neque non est suscipit, vel consequat magna varius. Sed pharetra, eros a luctus finibus, nunc urna bibendum libero, non malesuada massa urna eu tortor.
+Principalmente di questo software è stato studiato cosa prende in input e cosa restituisce in output
+
+\subsection{Input}
+Il programma prende in input un Dataset in formato csv.
+Il Dataset possiede una prima riga che funge da header, ogni nome di attributo è separato da un carattere speciale \footnote{Solitamente viene utilizzato il simbolo  ;  }
+Ogni riga del file csv costituisce una tupla.
+
+\subsection{Output}
+Una volta eseguito l’algoritmo di ricerca l’output, ossia le RFD trovate, viene stampato sul terminale. Le RFD sono raggruppate utilizzando come pivot l’attributo che si trova nel lato RHS\footnote{Per RHS si intende il lato destro di una dipendenza funzionale rilassata} della RFD. Il software restituisce le RFD in due formati:
+Il primo è sotto forma di Pandas Dataframe:
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l  l  l  l  l }
+     RHS & $attr_1$ & $attr_1$ &$attr_{\ldots}$ & $attr_n$ \\
+    \hline
+    0 & $v_{11}$ & $v_{12}$ & $v_{1\ldots}$ & $v_{1n}$\\
+    1 & $v_{21}$ & $v_{22}$ & $v_{2\ldots}$ & $v_{2n}$\\
+    $\ldots$ & $v_{\ldots1}$ & $v_{\ldots2}$ & $v_{\ldots}$ & $v_{\ldots n}$\\
+    m & $v_{m1}$ & $v_{m2}$ & $v_{m\ldots}$ & $v_{mn}$\\
+    \end{tabular}
+    \caption{Pandas Dataframe}
+    \label{tab:pandas_dataframe}
+\end{table}
+
+
+Nel caso in cui si avvia il programma specificando l’opzione “-human” si ottengono le RFD nel seguente formato:
+\\~\\
+\centerline{$attr_1(\leq soglia_1),attr_2(\leq soglia_2),\ldots,{attr_n}(\leq soglia_n)->RHS(\leq soglia_{rhs})$}
+\\~\\
+I tempi di esecuzione di questo algoritmo di ricerca sono abbastanza elevati, già con Dataset che superano il migliaio di righe i tempi non si misurano più in ore ma in giorni. Inoltre abbiamo notato che con Dataset costituiti da poche righe ma da molti attributi i tempi di calcolo aumentano esponenzialmente.
