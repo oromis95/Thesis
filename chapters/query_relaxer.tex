@@ -175,7 +175,7 @@ Sono state già calcolate le seguenti liste di RFD:
 La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa
 
 \subsection{Package io}
-In questo package sono contenuti diversi moduli divisi in baso al loro scopo.
+In questo package sono contenuti diversi moduli divisi in baso al loro scopo. Vi sono due sottocartelle che raggruppano il tutto.
 Il contenuto nella sottocartela csv comprende:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
@@ -298,4 +298,74 @@ class RFDExtractor:
 \label{Code:6}
 \end{listing}
 
-Non saranno fornite particolari informazioni su questa classe , in quanto essa fa semplicemente da wrapping all'algoritmo di ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
+Non saranno fornite particolari informazioni su questa classe , in quanto essa fa parte del progetto riguardante la ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
+
+\paragraph{store{\_}and{\_}load.py}
+È un modulo che ha funzione di wrapping per l'algoritmo di ricerca di RFD.
+Contiene due metodi:
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+def diff(list1: list, list2: list):
+...
+def search_rfds(csvPath,name_rfds_file):
+\end{minted}
+\caption{Metodi store{\_}load{\_}rfds}
+\label{Code:7}
+\end{listing}
+
+IL primo metodo "diff" prende in input due liste, e restituisce una lista di elementi che sono presenti nella prima ma non nella seconda.
+
+Il secondo metodo richiama l'algoritmo di Ricerca delle RFD \footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati} e crea un file contente una lista di RFD. Prende in input il path del file contenente il Dataset, e una stringa che contiene il nome del file che incapsula le RFD. 
+
+\subsection{Package query}
+Nel package query vi sono tre moduli, tutte e tre si occupano di svolgere operazioni riguardanti le interrogazioni al dataset.
+I tre moduli sono:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item query.py
+    \item relaxer.py
+    \item slicer.py
+\end{itemize}
+
+\paragraph{query.py}
+Questa classe rappresenta l'oggeto query, ogni condizione della query è rappresentata utilizzato il formato chiave:valore, dove ogni chiave indica l'attributo ed il valore indica il corrispondente valore che stiamo cercando. In parole povere la classe query è una struttura dati\footnote{In python abbiamo ritenuto che la struttura dati migliore fosse quella contenente un dizionario} per immagazzinare la query vera e propria.
+Questa classe contiene un metodo
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+def to_expression(self) -> str:
+    last_key = list(self.keys())[-1]
+    expr = ""
+    for k, v in self.items():
+        if isinstance(v, range):
+            ...
+        elif isinstance(v, dict):
+            expr += " {} >= {} and {} <= {}".format(k, v['min'],
+                                                    k, v['max'])
+        elif isinstance(v, (int, float, list)):
+            expr += " {} == {}".format(k, v)
+        elif isinstance(v, str):
+            if "%" in v:
+                if v.startswith("%") and v.endswith("%"):
+                    expr += k + ".str.contains('{}') ".format(v[1:-1])
+                elif v.startswith("%"):
+                    expr += k + ".str.endswith('{}') ".format(v[1::])
+                elif v.endswith("%"):
+                    expr += k + ".str.startswith('{}') ".format(v[:-1])
+            else:
+                expr += " {} == {}".format(k, v)
+
+        if k is not last_key:
+            expr += " and "
+    return expr
+\end{minted}
+\caption{Metodo def{\_}to{\_}express()}
+\label{Code:9}
+\end{listing}
+
+Questo metodo converte il dizionario nel formato stringa richiesto dal Dataframe di Pandas.
+Qui è importante fare delle precisazioni. In questa parte del codice vengono definite le condizioni che si possono applicare alla query.
+Nella riga 9 viene implementato la funzionalità di selezione di valori appartenenti ad un range. Possiamo effettuare una query del tipo: \\~\\
+\centerline{SELECT * FROM dataset{\_}string WHERE height BETWEEN $value_1$ and $value_2$}
+\\~\\
+Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
+Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
