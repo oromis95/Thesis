@@ -107,7 +107,6 @@ In questo caso entrambe le query restituiscono questo risultato: \newline
     \caption{Result Set restituito sia dalla query $Q_1$ e sia dalla query $Q_2$ }
     \label{tab:sta_ext_result_set}
 \end{table}
-
 \paragraph{Query Rilassata}
 In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata (vedi Appendice [perfezionamento con lhs]).
 Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati \footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
@@ -369,3 +368,57 @@ Nella riga 9 viene implementato la funzionalità di selezione di valori apparten
 \\~\\
 Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
 Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
+
+\paragraph{relaxer.py}
+Questo modulo contiene la classe QueryRelaxer, è una classe ausiliaria, contiene dei metodi statici che si occupano di rilassare la query rispetto ad una Relaxed Functional Dependency. La classe contiene i seguenti metodi:
+
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+class QueryRelaxer:
+    @staticmethod
+    def drop_query_nan(rfds_df: pd.DataFrame, query: dict) 
+                                            -> pd.DataFrame:
+    ...
+    @staticmethod
+    def drop_query_rhs(rfds_df: pd.DataFrame, query: dict)
+                                            -> pd.DataFrame:
+    ...
+    @staticmethod
+    def sort_by_decresing_nan_incresing_threshold(rfds_df: 
+                pd.DataFrame, query: dict) -> pd.DataFrame:
+    ...
+    @staticmethod
+    def sort_by_increasing_threshold(rfds_df: pd.DataFrame,
+        data_set: pd.DataFrame, query: dict) -> pd.DataFrame:
+    ...
+    @staticmethod
+    def rfd_to_string(rfd: dict) -> str:
+    ...
+    @staticmethod
+    def query_dict_to_expr(query: dict) -> str:
+    ...
+    @staticmethod
+    def extend_query_ranges(query: dict, rfd: dict, 
+            data_set: pd.DataFrame = None) -> dict:
+    ...
+    @staticmethod
+    def similar_strings(source: str, data: pd.DataFrame,
+                        col: str, threshold: int) -> list:
+    ...
+    @staticmethod
+    def extract_value_lists(df: pd.DataFrame, columns: list):
+    ...
+\end{minted}
+\caption{Classe Query Relaxer}
+\label{Code:10}
+\end{listing}
+
+Il metodo drop{\_}query{\_}na(...) si occupa di eliminare tutte le RFD che possiedono valori NaN su attributi che sono contenuti anche nella query. Il metodo prende in input un pandas.Dataframe contenente la lista di RFD ed un dizionario contenente la query, restituisce un altro pandas.Dataframe.
+
+Il metodo drop{\_}query{\_}rhs(...) si occupa di eliminare tutte le RFD che possiedono un attributo della query come parte RHS. Il metodo prende in input un pandas.Dataframe contenente la lista di RFD ed un dizionario contenente la query, restituisce un altro pandas.Dataframe.
+
+Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di NaN presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
+
+Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}
+
+il metodo rfd{\_}to{\_}string(...) svolge un ruolo alquanto semplice, si occupa di convertire il formato delle RFD in un formato stringa facilmente leggibile.

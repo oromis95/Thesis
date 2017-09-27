@@ -78,8 +78,6 @@ $c_{1_i}(t_1[A_i])$ dà vero se il predicato $c_1$, sull'attributo $A_i$ restitu
 \item $\epsilon$ è la soglia che indica il limite superiore o inferiore per il risultato della misura di copertura;
 \end{itemize}
 \end{theorem}
-
-
 Nel lavoro di tesi vengono trattate solo le RFD che rilassano il vincolo di uguaglianza. Data RFD $X \xrightarrow{} Y$ essa vale su una relazione $r$ se e solo se la distanza fra due tuple $t_1$ e $t_2$, i cui valori sui singoli attributi $A_i$ non superano una certa soglia $\beta_i$, è inferiore ad una certa soglia $a_A$ su ogni attributo $A \in X$, allora la distanza fra $t_1$ e $t_2$ su ogni attributo $B \in Y$ è minore di una certa soglia $a_B$.\\
 La struttura delle RFD utilizzate è la seguente:
 \\~\\
@@ -88,7 +86,6 @@ La struttura delle RFD utilizzate è la seguente:
 Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS\footnote{Left Hand Size o lato sinistro}, l'attributo che invece si trova dopo la freccia costituisce l'RHS\footnote{Right Hand Size o lato destro}. 
 È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante le RFD , bensì riguarda qualsiasi tipo di Dipendenza Funzionale
 Ad esempio consideriamo la relazione in questa tabella:
-\\
 \begin{table}[H]
     \centering
     \begin{tabular}{l |l |l |l |l }
