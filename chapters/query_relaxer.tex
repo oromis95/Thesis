@@ -326,49 +326,6 @@ I tre moduli sono:
     \item slicer.py
 \end{itemize}
 
-\paragraph{query.py}
-Questa classe rappresenta l'oggeto query, ogni condizione della query è rappresentata utilizzato il formato chiave:valore, dove ogni chiave indica l'attributo ed il valore indica il corrispondente valore che stiamo cercando. In parole povere la classe query è una struttura dati\footnote{In python abbiamo ritenuto che la struttura dati migliore fosse quella contenente un dizionario} per immagazzinare la query vera e propria.
-Questa classe contiene un metodo
-\begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
-def to_expression(self) -> str:
-    last_key = list(self.keys())[-1]
-    expr = ""
-    for k, v in self.items():
-        if isinstance(v, range):
-            ...
-        elif isinstance(v, dict):
-            expr += " {} >= {} and {} <= {}".format(k, v['min'],
-                                                    k, v['max'])
-        elif isinstance(v, (int, float, list)):
-            expr += " {} == {}".format(k, v)
-        elif isinstance(v, str):
-            if "%" in v:
-                if v.startswith("%") and v.endswith("%"):
-                    expr += k + ".str.contains('{}') ".format(v[1:-1])
-                elif v.startswith("%"):
-                    expr += k + ".str.endswith('{}') ".format(v[1::])
-                elif v.endswith("%"):
-                    expr += k + ".str.startswith('{}') ".format(v[:-1])
-            else:
-                expr += " {} == {}".format(k, v)
-
-        if k is not last_key:
-            expr += " and "
-    return expr
-\end{minted}
-\caption{Metodo def{\_}to{\_}express()}
-\label{Code:9}
-\end{listing}
-
-Questo metodo converte il dizionario nel formato stringa richiesto dal Dataframe di Pandas.
-Qui è importante fare delle precisazioni. In questa parte del codice vengono definite le condizioni che si possono applicare alla query.
-Nella riga 9 viene implementato la funzionalità di selezione di valori appartenenti ad un range. Possiamo effettuare una query del tipo: \\~\\
-\centerline{SELECT * FROM dataset{\_}string WHERE height BETWEEN $value_1$ and $value_2$}
-\\~\\
-Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
-Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
-
 \paragraph{relaxer.py}
 Questo modulo contiene la classe QueryRelaxer, è una classe ausiliaria, contiene dei metodi statici che si occupano di rilassare la query rispetto ad una Relaxed Functional Dependency. La classe contiene i seguenti metodi:
 
@@ -422,3 +379,49 @@ Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contie
 Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}
 
 il metodo rfd{\_}to{\_}string(...) svolge un ruolo alquanto semplice, si occupa di convertire il formato delle RFD in un formato stringa facilmente leggibile.
+
+Questo metodo converte il dizionario nel formato stringa richiesto dal Dataframe di Pandas.
+Qui è importante fare delle precisazioni dato che in  questa parte del codice vengono definite le condizioni che si possono applicare alla query.
+Nella riga 9 viene implementato la funzionalità di selezione di valori appartenenti ad un range. Possiamo effettuare una query del tipo: \\~\\
+\centerline{SELECT * FROM dataset{\_}string WHERE height BETWEEN $value_1$ and $value_2$}
+\\~\\
+Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
+Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
+
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+def to_expression(self) -> str:
+    last_key = list(self.keys())[-1]
+    expr = ""
+    for k, v in self.items():
+        if isinstance(v, range):
+            ...
+        elif isinstance(v, dict):
+            expr += " {} >= {} and {} <= {}".format(k, v['min'],
+                                                    k, v['max'])
+        elif isinstance(v, (int, float, list)):
+            expr += " {} == {}".format(k, v)
+        elif isinstance(v, str):
+            if "%" in v:
+                if v.startswith("%") and v.endswith("%"):
+                    expr += k + ".str.contains('{}') ".format(v[1:-1])
+                elif v.startswith("%"):
+                    expr += k + ".str.endswith('{}') ".format(v[1::])
+                elif v.endswith("%"):
+                    expr += k + ".str.startswith('{}') ".format(v[:-1])
+            else:
+                expr += " {} == {}".format(k, v)
+
+        if k is not last_key:
+            expr += " and "
+    return expr
+\end{minted}
+\caption{Metodo def{\_}to{\_}express()}
+\label{Code:9}
+\end{listing}
+
+Il metodo extend{\_}query{\_}ranges(...) prende in input una query ed una RFD ed estende i range sugli attributi basandosi sulle soglie contenute nella RDF. Nel caso in qualche attributo della query è di tipo stringa vengono calcolate le stringhe simili e vengono utilizzare nella query estesa.
+(vedi lavori futuri)
+
+
+Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe ed una soglia e si occupa di trovare nel database tutte le stringhe che differiscono di una soglia $\epsilon$. Restituisce un altro pandas.Dataframe 
