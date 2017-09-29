@@ -330,7 +330,7 @@ I tre moduli sono:
 Questo modulo contiene la classe QueryRelaxer, è una classe ausiliaria, contiene dei metodi statici che si occupano di rilassare la query rispetto ad una Relaxed Functional Dependency. La classe contiene i seguenti metodi:
 
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
 class QueryRelaxer:
     @staticmethod
     def drop_query_nan(rfds_df: pd.DataFrame, query: dict) 
@@ -389,7 +389,7 @@ Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float
 Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
 
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
 def to_expression(self) -> str:
     last_key = list(self.keys())[-1]
     expr = ""
@@ -423,9 +423,9 @@ def to_expression(self) -> str:
 Il metodo extend{\_}query{\_}ranges(...) prende in input una query ed una RFD ed estende i range sugli attributi basandosi sulle soglie contenute nella RDF. Nel caso in qualche attributo della query è di tipo stringa vengono calcolate le stringhe simili e vengono utilizzare nella query estesa.
 (vedi lavori futuri)
 
-
 Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe ed una soglia e si occupa di trovare nel database tutte le stringhe che differiscono di una soglia $\epsilon$. Restituisce un altro pandas.Dataframe 
 
 Il metodo extraxt{\_}value{\_}list(...) prende in input un pandas.Dataframe ed una lista contenente le colonne di cui si vogliono estrarre i valori. Questo metodo restituisce un dizionario di liste, ognuna delle quali ha come chiave il nome dell'attributo
 
 \section{Test}
+In questa sezione sono raccolti tutti i test effettuati sul progetto.
