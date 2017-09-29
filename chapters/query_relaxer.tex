@@ -107,7 +107,6 @@ In questo caso entrambe le query restituiscono questo risultato: \newline
     \caption{Result Set restituito sia dalla query $Q_1$ e sia dalla query $Q_2$ }
     \label{tab:sta_ext_result_set}
 \end{table}
-
 \paragraph{Query Rilassata}
 In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata (vedi Appendice [perfezionamento con lhs]).
 Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati \footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
@@ -175,7 +174,7 @@ Sono state già calcolate le seguenti liste di RFD:
 La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa
 
 \subsection{Package io}
-In questo package sono contenuti diversi moduli divisi in baso al loro scopo.
+In questo package sono contenuti diversi moduli divisi in baso al loro scopo. Vi sono due sottocartelle che raggruppano il tutto.
 Il contenuto nella sottocartela csv comprende:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
@@ -298,4 +297,135 @@ class RFDExtractor:
 \label{Code:6}
 \end{listing}
 
-Non saranno fornite particolari informazioni su questa classe , in quanto essa fa semplicemente da wrapping all'algoritmo di ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
+Non saranno fornite particolari informazioni su questa classe , in quanto essa fa parte del progetto riguardante la ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
+
+\paragraph{store{\_}and{\_}load.py}
+È un modulo che ha funzione di wrapping per l'algoritmo di ricerca di RFD.
+Contiene due metodi:
+\begin{listing}[H]
+\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+def diff(list1: list, list2: list):
+...
+def search_rfds(csvPath,name_rfds_file):
+\end{minted}
+\caption{Metodi store{\_}load{\_}rfds}
+\label{Code:7}
+\end{listing}
+
+IL primo metodo "diff" prende in input due liste, e restituisce una lista di elementi che sono presenti nella prima ma non nella seconda.
+
+Il secondo metodo richiama l'algoritmo di Ricerca delle RFD \footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati} e crea un file contente una lista di RFD. Prende in input il path del file contenente il Dataset, e una stringa che contiene il nome del file che incapsula le RFD. 
+
+\subsection{Package query}
+Nel package query vi sono tre moduli, tutte e tre si occupano di svolgere operazioni riguardanti le interrogazioni al dataset.
+I tre moduli sono:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item query.py
+    \item relaxer.py
+    \item slicer.py
+\end{itemize}
+
+\paragraph{relaxer.py}
+Questo modulo contiene la classe QueryRelaxer, è una classe ausiliaria, contiene dei metodi statici che si occupano di rilassare la query rispetto ad una Relaxed Functional Dependency. La classe contiene i seguenti metodi:
+
+\begin{listing}[H]
+\begin{minted}[frame=lines,linenos]{python}
+class QueryRelaxer:
+    @staticmethod
+    def drop_query_nan(rfds_df: pd.DataFrame, query: dict) 
+                                            -> pd.DataFrame:
+    ...
+    @staticmethod
+    def drop_query_rhs(rfds_df: pd.DataFrame, query: dict)
+                                            -> pd.DataFrame:
+    ...
+    @staticmethod
+    def sort_by_decresing_nan_incresing_threshold(rfds_df: 
+                pd.DataFrame, query: dict) -> pd.DataFrame:
+    ...
+    @staticmethod
+    def sort_by_increasing_threshold(rfds_df: pd.DataFrame,
+        data_set: pd.DataFrame, query: dict) -> pd.DataFrame:
+    ...
+    @staticmethod
+    def rfd_to_string(rfd: dict) -> str:
+    ...
+    @staticmethod
+    def query_dict_to_expr(query: dict) -> str:
+    ...
+    @staticmethod
+    def extend_query_ranges(query: dict, rfd: dict, 
+            data_set: pd.DataFrame = None) -> dict:
+    ...
+    @staticmethod
+    def similar_strings(source: str, data: pd.DataFrame,
+                        col: str, threshold: int) -> list:
+    ...
+    @staticmethod
+    def extract_value_lists(df: pd.DataFrame, columns: list):
+    ...
+\end{minted}
+\caption{Classe Query Relaxer}
+\label{Code:10}
+\end{listing}
+
+Il metodo drop{\_}query{\_}na(...) si occupa di eliminare tutte le RFD che possiedono valori NaN su attributi che sono contenuti anche nella query. Il metodo prende in input un pandas.Dataframe contenente la lista di RFD ed un dizionario contenente la query, restituisce un altro pandas.Dataframe.
+
+Il metodo drop{\_}query{\_}rhs(...) si occupa di eliminare tutte le RFD che possiedono un attributo della query come parte RHS. Il metodo prende in input un pandas.Dataframe contenente la lista di RFD ed un dizionario contenente la query, restituisce un altro pandas.Dataframe.
+
+Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di NaN presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
+
+Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}
+
+il metodo rfd{\_}to{\_}string(...) svolge un ruolo alquanto semplice, si occupa di convertire il formato delle RFD in un formato stringa facilmente leggibile.
+
+Questo metodo converte il dizionario nel formato stringa richiesto dal Dataframe di Pandas.
+Qui è importante fare delle precisazioni dato che in  questa parte del codice vengono definite le condizioni che si possono applicare alla query.
+Nella riga 9 viene implementato la funzionalità di selezione di valori appartenenti ad un range. Possiamo effettuare una query del tipo: \\~\\
+\centerline{SELECT * FROM dataset{\_}string WHERE height BETWEEN $value_1$ and $value_2$}
+\\~\\
+Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
+Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
+
+\begin{listing}[H]
+\begin{minted}[frame=lines,linenos]{python}
+def to_expression(self) -> str:
+    last_key = list(self.keys())[-1]
+    expr = ""
+    for k, v in self.items():
+        if isinstance(v, range):
+            ...
+        elif isinstance(v, dict):
+            expr += " {} >= {} and {} <= {}".format(k, v['min'],
+                                                    k, v['max'])
+        elif isinstance(v, (int, float, list)):
+            expr += " {} == {}".format(k, v)
+        elif isinstance(v, str):
+            if "%" in v:
+                if v.startswith("%") and v.endswith("%"):
+                    expr += k + ".str.contains('{}') ".format(v[1:-1])
+                elif v.startswith("%"):
+                    expr += k + ".str.endswith('{}') ".format(v[1::])
+                elif v.endswith("%"):
+                    expr += k + ".str.startswith('{}') ".format(v[:-1])
+            else:
+                expr += " {} == {}".format(k, v)
+
+        if k is not last_key:
+            expr += " and "
+    return expr
+\end{minted}
+\caption{Metodo def{\_}to{\_}express()}
+\label{Code:9}
+\end{listing}
+
+Il metodo extend{\_}query{\_}ranges(...) prende in input una query ed una RFD ed estende i range sugli attributi basandosi sulle soglie contenute nella RDF. Nel caso in qualche attributo della query è di tipo stringa vengono calcolate le stringhe simili e vengono utilizzare nella query estesa.
+(vedi lavori futuri)
+
+Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe ed una soglia e si occupa di trovare nel database tutte le stringhe che differiscono di una soglia $\epsilon$. Restituisce un altro pandas.Dataframe 
+
+Il metodo extraxt{\_}value{\_}list(...) prende in input un pandas.Dataframe ed una lista contenente le colonne di cui si vogliono estrarre i valori. Questo metodo restituisce un dizionario di liste, ognuna delle quali ha come chiave il nome dell'attributo
+
+\section{Test}
+In questa sezione sono raccolti tutti i test effettuati sul progetto.
