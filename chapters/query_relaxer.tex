@@ -321,7 +321,6 @@ Nel package query vi sono tre moduli, tutte e tre si occupano di svolgere operaz
 I tre moduli sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
-    \item query.py
     \item relaxer.py
     \item slicer.py
 \end{itemize}
@@ -427,5 +426,72 @@ Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe 
 
 Il metodo extraxt{\_}value{\_}list(...) prende in input un pandas.Dataframe ed una lista contenente le colonne di cui si vogliono estrarre i valori. Questo metodo restituisce un dizionario di liste, ognuna delle quali ha come chiave il nome dell'attributo
 
+\paragraph{slicer.py}
+È una classe ausiliaria che contiene un solo metodo.
+\begin{listing}[H]
+\begin{minted}[frame=lines,linenos]{python}
+class Slicer:
+    @staticmethod
+    def slice(df: pd.DataFrame) -> list:
+\end{minted}
+\caption{Metodo def{\_}to{\_}express()}
+\label{Code:9}
+\end{listing}
+
+Il metodo slice() si occupa di dividere un pandas.Dataframe, ogni tupla andrà a formare un nuovo Dataframe, viene restituita una lista di DataFrame.
+
+\subsection{Modulo main.py}
+Modulo che lancia il programma vero e proprio. Richiede
+l'inserimento del nome di un Dataset, assieme ad una serie di opzioni
+facoltative, secondo la seguente struttura:
+\begin{listing}[H]
+\begin{minted}[frame=lines,linenos]{python}
+python main .py -p <path-of-dataset > -q <query> [ options ]
+\end{minted}
+\end{listing}
+
+dove:
+\begin{itemize}
+\item path-of-dataset è il path relativo Dataset da utilizzare per le query;
+\item query è il parametro contenente la query, essa può avere la seguente struttura\footnote{I valori nel caso siano in formato stringa vanno racchiusi fra apici singoli. Ciò viene fatto per evitare problemi nella lettura di eventuali spazi bianchi.}:
+\begin{itemize}
+\item query semplice : \mint{json}|"{'nome_attributo',valore_attributo}"|
+\item query con funzione like : \mint{json}|"{'nome_attributo','%value%'}"|
+\item query con controllo su range :  \mint{json}|"{'nome_attributo',{'min':min_val,'max':max_val}}"|
+\end{itemize}
+\end{itemize}
+e [options] può contenere zero o più delle seguenti opzioni:
+
+\begin{itemize}
+\item -r $<$rfds-path$>$ : nome del file in cui sono salvate le RFD, se non viene fornito le RFD vengono calcolate
+\item -n $<$number-of-test$>$ : numero di RFD da testare, se non viene fornito il test viene effettuato per tutte le RFD contenute nella lista
+\item -o $<$path-output$>$ : nome del file in cui salvare l'output del processo di Query Relaxing
+\end{itemize}
+
+
+\paragraph{Metodo main()}
+Il metodo main è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process()
+
+\paragraph{Metodo start{\_}process()}
+Questo metodo rapprensenta il core del software, incapsula tutti i processi di Query Relaxation.
+Segue ora una lista dei metodi che vengono richiamati:
+\begin{enumerate}
+    \item Inizialmente si occupa di leggere il DataSet richiamando i metodi della classe CSVInputOutput.
+    \item Viene effettuato il carimento della lista di RFD, se tale file non esiste viene generato
+    \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodichè viene ordinato
+    \item Per ogni RFD i contenuta nella lista \footnote{Vi è un parametro per specificare il numero massimo di RFD da testare} si itera nel seguente modo :
+    \begin{itemize}
+        \item Si effettua una query estesa rispetto alle soglie della RFD i-esima
+        \item Vengono caricati ,dal Result Set ,tutti i valori degli attributi che sono nella parte RHS della query, inoltre vengono caricati anche i valori degli attributi LHS che non sono nella query. Viene mantenuto un DataFrame per ogni tupla risultante nel Result Set
+        \item Tutti i valori nei DataFrame generati precedentemente vengono estesi rispetto alla soglie della RFD i-esima.
+        \item Viene effettuata una query unendo (con degli or) tutte le condizioni contenute nel DataFrame
+        \item Il Result Set contenuto dalla query rilassata viene salvato in memoria.
+    \end{itemize}
+    \item Viene restituito in output il Result Set meno ampio possibile, che sia però di cardinalità maggiore a quello restituito dalla query originale.
+\end{enumerate}
+
+
+
 \section{Test}
 In questa sezione sono raccolti tutti i test effettuati sul progetto.
+

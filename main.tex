@@ -19,7 +19,7 @@
 \usepackage{minted}
 \usemintedstyle{emacs}
 \usepackage{xcolor}
-
+\renewcommand{\theFancyVerbLine}{\sffamily \textcolor[rgb]{0,0,0}{\large \oldstylenums{\arabic{FancyVerbLine}}}}
 
 \begin{document}
 
@@ -38,7 +38,7 @@ Il concetto ivi sviluppato non riguarda il semplice ampliamento dei range sui vi
 \chapter*{Dedica}
 
 
-\tableofcontents
+
 
 \chapter{Introduzione}
 \input{chapters/introduction.tex}
@@ -53,6 +53,7 @@ Il concetto ivi sviluppato non riguarda il semplice ampliamento dei range sui vi
 \chapter{Appendice}
 \input{chapters/appendix.tex}
 
+\tableofcontents
 \listoffigures
 \listoftables
 \renewcommand\listoflistingscaption{Elenco degli snippet di codice}
