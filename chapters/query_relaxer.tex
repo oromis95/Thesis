@@ -446,26 +446,33 @@ l'inserimento del nome di un Dataset, assieme ad una serie di opzioni
 facoltative, secondo la seguente struttura:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
-python main .py -p <path-of-dataset > - [ options ]
+python main .py -p <path-of-dataset > -q <query> [ options ]
 \end{minted}
 \end{listing}
 
 dove:
 \begin{itemize}
 \item path-of-dataset è il path relativo Dataset da utilizzare per le query;
-\end{itemize}
-e [options] può contenere zero o più delle seguenti opzioni:
+\item query è il parametro contenente la query, essa può avere la seguente struttura\footnote{I valori nel caso siano in formato stringa vanno racchiusi fra apici singoli. Ciò viene fatto per evitare problemi nella lettura di eventuali spazi bianchi.}:
 \begin{itemize}
-\item null
+\item query semplice : \mint{json}|"{'nome_attributo',valore_attributo}"|
+\item query con funzione like : \mint{json}|"{'nome_attributo','%value%'}"|
+\item query con controllo su range :  \mint{json}|"{'nome_attributo',{'min':min_val,'max':max_val}}"|
+\end{itemize}
+\end{itemize}
+e [options] può contenere zero o più delle seguenti opzioni:
+
+\begin{itemize}
+\item -r $<$rfds-path$>$ : nome del file in cui sono salvate le RFD, se non viene fornito le RFD vengono calcolate
+\item -n $<$number-of-test$>$ : numero di RFD da testare, se non viene fornito il test viene effettuato per tutte le RFD contenute nella lista
+\item -o $<$path-output$>$ : nome del file in cui salvare l'output del processo di Query Relaxing
 \end{itemize}
 
 
-e [options] può contenere zero o più delle seguenti opzioni:
+\paragraph{Metodo main()}
+Il metodo main è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process()
 
-\paragraph{Metodo main}
-Il metodo main è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process
-
-\paragraph{Metodo start{\_}process}
+\paragraph{Metodo start{\_}process()}
 Questo metodo rapprensenta il core del software, incapsula tutti i processi di Query Relaxation.
 Segue ora una lista dei metodi che vengono richiamati:
 \begin{enumerate}
