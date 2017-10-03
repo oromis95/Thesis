@@ -8,10 +8,10 @@ Questa nuova conoscenza viene data dalle RFD.
 
 \section{Utilizzo delle FD in contesti particolari}
 
-In alcuni contesti non è possibile utilizzare le FD canoniche, in quanto il concetto di uguaglianza non esiste. In questi casi vengono applicati delle funzioni di similarità ad-hoc. Gli esempi più banali cominciano dalle stringhe dove per misurare la differenza fra due di esse si usa la Distanza di Levenshtein, o dalla data  dove per effettuare un confronto bisogna implementare il calendario gregoriano. In alcuni ambiti invece le funzioni di similarità aumentano di complessità, si pensi a come può essere strutturata una funzione di similarità in un sistema multimediale. In molti casi è opportuno implementare una fonte di conoscenza esterna, se ad esempio ad un database riguardante le città europee conviene utilizzare una funzione che ne misuri la distanza. Le FD canoniche non ammettono l'esistenza di un funzione di similarita, in questo caso si preferiscono utilizzare le AFD
+In alcuni contesti non è possibile utilizzare le FD canoniche, in quanto il concetto di uguaglianza non esiste. In questi casi vengono applicati delle funzioni di similarità ad-hoc. Gli esempi più banali cominciano dalle stringhe dove per misurare la differenza fra due di esse si usa la Distanza di Levenshtein, o dalla data  dove per effettuare un confronto bisogna implementare il calendario gregoriano. In alcuni ambiti invece le funzioni di similarità aumentano di complessità, si pensi a come può essere strutturata una funzione di similarità in un sistema multimediale. In molti casi è opportuno implementare una fonte di conoscenza esterna, come ad esempio in un database riguardante le città europee conviene utilizzare una funzione che ne misuri la distanza spaziale piuttosto che la somiglianza lessicale. Le FD canoniche non ammettono l'esistenza di un funzione di similarita, in questo caso si preferiscono utilizzare le AFD.
 
 \section{Ricerca di RFD}
-Gli algoritmi di ricerca delle AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, ciò al momento pone un forte fardello sullo sviluppo di software che sfruttano le AFD. Con database che superano le migliaia di righe è ancora impossibile l’approccio. In questo lavoro di tesi non sono stati utilizzati DataSet troppo ampi in quanto il tempo richiesto per generare le RFD era spropositato. Al momento vi sono alcuni team che stanno lavorando sulla parallelizzazione dell'algoritmo di ricerca, si sono già ottenuti ottimi risultati durante la fase di testing, si è arrivati ad ottenere un aumento delle performance pari al 75%.
+Gli algoritmi di ricerca delle AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, la complessità è riconducibile al problema di trovare un minimal cover set di RFD verificate per una relazione r. Ciò al momento pone un forte fardello sullo sviluppo di software che sfruttano le AFD. Con database che superano le migliaia di righe è ancora impossibile l’approccio. In questo lavoro di tesi non sono stati utilizzati DataSet troppo ampi in quanto il tempo richiesto per generare le RFD era spropositato. Al momento vi sono alcuni team che stanno lavorando sulla parallelizzazione dell'algoritmo di ricerca, si sono già ottenuti ottimi risultati durante la fase di testing, si è arrivati ad ottenere un aumento delle performance pari al 75%.
 
 
 \section{Studi Preliminari}
@@ -74,7 +74,12 @@ c: 3
 \end{itemize}
 
 
-Oltre Python sono stati utilizzati alcuni Framework: Pandas,Numpy,ecc..
+Oltre le librerie standard sono stati utilizzati alcuni Framework esterni: 
+\begin{itemize}
+\item Pandas: È una libreria che include delle strutture dati e tool di analisi facili da usare e fortemente ottimizzate. 
+\item Numpy : È un package dedicato all'elaborazione scientifica sul linguaggio Python.
+
+\end{itemize}
 All'infuori delle conoscenze legate ai linguaggi di programmazione , è stato necessario leggere e studiare vari documenti legati al mondo delle dipendenze funzionali. La maggior parte del tempo è stata impiegata per capire in che modo utilizzare le RFD. 
 È stato necessario comprendere il funzionamento(visione black-box) dell’algoritmo utilizzato nel progetto di IA. 
 
@@ -93,6 +98,24 @@ Una relazione su uno schema $R(X)$ è un insieme $r$ di tuple su $X$. Per
 ogni istanza $r \in R(X)$, per ogni tupla $t \in r$ e per ogni attributo $A \in X$,
 $t[A]$ rappresenta la proiezione di $A$ su $t$. In modo analogo, dato un insieme
 di attributi $Y \subseteq X$, $t[Y]$ rappresenta la proiezione di $Y$ su $t$.\cite{libroCeri}
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ | l | l | l | l |}
+        \hline
+        Matricola & Cognome & Nome & Data di nascita\\
+        \hline
+        276545 & Rossi & Maria & 25/11/1991 \\ 
+        485745 & Neri & Anna & 23/04/1992 \\ 
+        200768 & Verdi & Fabio & 12/02/1992 \\
+        587614 & Rossi & Luca & 10/10/1991 \\
+        937653 & Bruni & Mario & 01/12/1991 \\
+        \hline
+    \end{tabular}
+    \caption{Esempio di schema di relazione}
+    \label{tab:table example}
+\end{table}
 
 
 \subsection{Dipendenze funzionali canoniche}
@@ -142,7 +165,8 @@ Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS
 Ad esempio consideriamo la relazione in questa tabella:
 \begin{table}[H]
     \centering
-    \begin{tabular}{l |l |l |l |l }
+    \begin{tabular}{|l |l |l |l |l |}
+    \hline
      Impiegato & Stipendio & Progetto & Bilancio & Funzione \\
     \hline
     Rossi & 20000  & Sito web & 2000 & tecnico\\
@@ -155,6 +179,7 @@ Ad esempio consideriamo la relazione in questa tabella:
     Mori & 48000 & Server & 15000 & progettista\\
     Bianchi & 48000 & Server & 15000 & progettista\\
     Bianchi & 48000 & App Mobile & 15000 & direttore\\
+    \hline
     \end{tabular}
     \caption{Esempio di Relazione con anomalie}
     \label{tab:relationship_anomalies}
