@@ -7,16 +7,16 @@ In questa sezione saranno illustrati sequenzialmente i passi effettuati dal soft
     \item Query Estesa
     \item Query Rilassata
 \end{itemize}
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/Flowchart.jpg}
 \caption{Flowchart}\label{fig:4}
 \end{figure}
 \paragraph{Caricamento Dataset}
-Il primo passo da effettuare è quello di caricare il Dataset in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il dataset può contenere vari tipi di dati: float, int, stringhe e date.
-La struttura dati utilizzata per contenere i dati è quella del pandas.Dataframe , contenuta nel package Pandas\footnote{Pandas è una libreria software scritta per il linguaggio di programmazione Python .È adibita alla manipolazione e l'analisi dei dati. In particolare, offre strutture e operazioni di dati per la manipolazione di tabelle numeriche e di serie temporali. }. \\Il Dataframe di Pandas è una struttura dati tabulare bidimensionale variabile in formato, potenzialmente eterogenea e con assi etichettati (righe e colonne). Le operazioni vengono effettuate sulle righe e sulle colonne. 
+Il primo passo da effettuare è quello di caricare il DataSet in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il DataSet può contenere vari tipi di dati: float, int, stringhe e date.
+La struttura dati utilizzata per contenere i dati è quella del pandas.Dataframe , contenuta nel package Pandas\footnote{Pandas è una libreria software scritta per il linguaggio di programmazione Python .È adibita alla manipolazione e l'analisi dei dati. In particolare, offre strutture e operazioni di dati per la manipolazione di tabelle numeriche e di serie temporali. }. \\Il Dataframe di Pandas è una struttura dati tabulare bidimensionale variabile in formato e con assi etichettati (righe e colonne). Le operazioni vengono effettuate sulle righe e sulle colonne. 
 \paragraph{Carimento lista RFD}
-Il secondo passo consiste nel caricare la lista di RFD. L'utente può passare il path del file contenente le RFD, altrimenti viene invocato un algoritmo di ricerca di RFD sul Dataset indicato.
+Il secondo passo consiste nel caricare la lista di RFD. L'utente può passare il path del file contenente le RFD, altrimenti viene invocato un algoritmo di ricerca di RFD sul DataSet indicato.
 Nel caso in cui venga passato il path, il formato del file deve essere di tipo csv, con carattere di separazione uguale a ";"\footnote{In realtà è stato implementato un sistema capace di riconoscere ed utilizzare un qualsiasi carattere di separazione}.
 Dato che ogni RFD può avere un attributo diverso come parte RHS , si è scelto di utilizzare una particolare notazione:
 \begin{table}[H]
@@ -34,10 +34,10 @@ Dato che ogni RFD può avere un attributo diverso come parte RHS , si è scelto 
 
 La prima colonna del Dataframe contiene non una soglia bensì il nome dell'attributo che funge da RHS in quella RFD.
 \\
-Se l'utente non fornisce il path del file, o il file non viene trovato, il software richiama l'algoritmo di ricerca delle RFD. Il path del Dataset viene passato all'algoritmo di RFDD\footnote{Relaxed Functional Dependencies Discovery} , dopo aver elaborato restituisce una Dataframe contenente le RFD, le quali vengono salvate su file e successivamente caricate in memoria.
+Se l'utente non fornisce il path del file, o se il file non viene trovato, il software richiama l'algoritmo di ricerca delle RFD. Il path del Dataset viene passato all'algoritmo di RFDD\footnote{Relaxed Functional Dependencies Discovery} , dopo aver elaborato restituisce una Dataframe contenente le RFD, le quali vengono salvate su file e successivamente caricate in memoria.
 \paragraph{Ordinamento delle RFD}
 Una volta caricata la lista di query è necessario effettuare una pulizia sui dati.
-Vengono eliminate le RFD che valore "NaN" su attributi che sono presenti nella query, dopodiché vengono eliminate le RFD dove nel lato RHS è presente un attributo della query \footnote{Utilizzare una RFD di questo tipo significherebbe utilizzare una dipendenza funzionale rilassata banale, la quale non porta alcuna informazione aggiuntiva}
+Vengono eliminate le RFD che possiedono valore "NaN" su attributi che sono presenti nella query, dopodiché vengono eliminate le RFD dove nel lato RHS è presente un attributo della query \footnote{Utilizzare una RFD di questo tipo significherebbe utilizzare una dipendenza funzionale rilassata banale, la quale non porta alcuna informazione aggiuntiva}
 \begin{table}[H]
     \centering
     \begin{tabular}{l l l l l }
@@ -55,8 +55,8 @@ Dopo aver effettuato questa pulizia le RFD vengono ordinate.
 C'è stata molta indecisione riguardo l'implementazione dell'ordinamento, in quanto non è stata trovata una dimostrazione formale che ci indicasse quale metodo fosse il più efficace.
 L'obiettivo è stato quello di trovare un algoritmo che ordinasse le RFD dando precedenza a quelle che producono Result Set non troppo ampi.
 \\
-Dopo vari test abbiamo pervenuto che il metodo più efficacie fosse quello di ordinare le RFDs prima in ordine decrescente rispetto al numero di attributi con valore "Nan" e poi in ordine crescente di soglia rispetto agli attributi presenti nella query. 
-L'ordinare secondo soglie più piccole indica che quelle RFD agiscono su range ridotti, indicativamente ciò significa che in dato rispetto ad un range più ampio un range di dimensioni ridotte include meno dati .In realtà può capitare che in un Dataset vi sia un aggregazione di dati un piccolo range superiore a tutti gli altri dati presenti nel Dataset, ad esempio preso un Dataset che possiede un attributo altezza possiamo avere i seguenti valori
+Dopo vari test abbiamo pervenuto che il metodo più efficacie fosse quello di ordinare le RFDs prima in ordine decrescente rispetto al numero di attributi con valore "NaN" e poi in ordine crescente di soglia rispetto agli attributi presenti nella query. 
+L'ordinare secondo soglie più piccole indica che quelle RFD agiscono su range ridotti, indicativamente ciò significa che rispetto ad un range più ampio un range di dimensioni ridotte include meno dati .In realtà può capitare che in un range di un DataSet vi sia una forte aggregazione di dati , superiore a tutti gli altri dati presenti nel Dataset. Ad esempio preso un Dataset che possiede un attributo altezza possiamo avere i seguenti valori
 \begin{table}[H]
     \centering
     \begin{tabular}{l }
@@ -108,10 +108,10 @@ Viene selezionata la i-esima RFD con $i\in[1,n]$.
 Si vanno a considerare gli attributi della RFD che siano presenti nella query\footnote{In questo momento si considerano solo gli attributi in LHS}, si prendono le soglie e si effettua una nuova una query estesa $Q_2$
 Ad esempio supponendo che la query iniziale sia: \\~\\ \centerline{SELECT * FROM dataset{\_}string WHERE height=169} \\~\\ e che la RFD selezionata sia: \\~\\ \centerline{$(height \leq 0.0)  \rightarrow(shoe_size \leq 0.0)$} \\~\\
 Viene effettuato un controllo sul tipo di valori degli attributi della query,
-si vanno a identificare string, int e float, questa identificazione serve a specificare quale funzione di distanza bisogna applicare durante l'estensione della query.
-Dato che height è un attributo di tipo numerico, si vanno a prendere tutti i valori che differiscono di 0 dal valore iniziale inserito dall'utente. In questo caso la query estesa $Q_2$ resta uguale a $Q_1$: \newline 
-\centerline{SELECT * FROM dataset{\_}string WHERE height =169} \newline
-Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dall query iniziale
+si vanno a identificare tipi string, int e float, questa identificazione serve a specificare quale funzione di distanza bisogna applicare durante l'estensione della query.
+Dato che $height$ è un attributo di tipo numerico, si vanno a prendere tutti i valori che differiscono di 0 dal valore iniziale inserito dall'utente. In questo caso la query estesa $Q_2$ resta uguale a $Q_1$: \\~\\ 
+\centerline{SELECT * FROM dataset{\_}string WHERE height =169} \\~\\
+Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dall query iniziale.
 In questo caso entrambe le query restituiscono questo risultato: \newline 
 \begin{table}[H]
     \centering
@@ -119,16 +119,15 @@ In questo caso entrambe le query restituiscono questo risultato: \newline
     n.row   & height & weight & shoe{\_}size & age \\
     \hline
     5 & 169 & 73 & 38 & 49 \\
-
     \end{tabular}
     \caption{Result Set restituito sia dalla query $Q_1$ e sia dalla query $Q_2$ }
     \label{tab:sta_ext_result_set}
 \end{table}
 \paragraph{Query Rilassata}
 In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata (vedi Appendice [perfezionamento con lhs]).
-Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati \footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
-Per ogni set vengono rilassati i valori in base alle soglie contenute nella RFD, i risultato sarà una serie si SET che contengono dei range più ampi.
-È quindi possibile effettuare k query rilassate, ottenendo vari Result Set. La loro unione andrà a costituire il Result Set finale che sarà restituito in output.
+Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati\footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
+Per ogni Set vengono rilassati i valori in base alle soglie contenute nella RFD, il risultato sarà una serie di SET che contengono dei range più ampi.
+È quindi possibile effettuare $k$ query rilassate, ottenendo vari Result Set. La loro unione andrà a costituire il Result Set finale che sarà restituito in output.
 Riprendendo l'esempio riportato nel paragrafo precedente, vengono raccolti i dati sui valori presenti in RHS, in questo caso vi è solo l'attributo shoe{\_}sie \footnote{In realtà in RHS vi è sempre un unico attributo, la query viene rilassata con più attributi in quanto si esegue un perfezionamento vedi  Appendice [perfezionamento combinazioni]} che viene rilassato di una soglia pari a 0. Dato che la query estesa $Q_2$ ha restituito una sola tupla, verrà rilassato un unico valore. La query rilassata $Q_3$  è : \newline 
 \centerline{SELECT * FROM dataset{\_}string WHERE shoe{\_}size=38}
 \newline
@@ -148,7 +147,7 @@ In questo caso il Result Set è uguale a :
     \label{tab:relax_result_set}
 \end{table}
 
-Dato che questa procedura viene effettuata per un numero N di RFD, viene effettuato un confronto in modo tale da restituire il Result Set che che sia il meno ampio possibile \footnote{Vengono scartati i Result Set che hanno cardinalità uguale ad Result Restituito dalla query iniziale}
+Dato che questa procedura viene effettuata per un numero N di RFD, viene effettuato un confronto in modo tale da restituire il Result Set che che sia il meno ampio possibile \footnote{Vengono scartati i Result Set che hanno cardinalità uguale ad Result restituito dalla query iniziale}.
 
 \section{Struttura del Progetto}
 Il progetto è incluso in una cartella contenente anche il software di ricerca di RFD, tutto il codice sviluppato è contenuto nella sottocartella query{\_}rewriter
@@ -160,7 +159,7 @@ Il progetto è incluso in una cartella contenente anche il software di ricerca d
 \end{figure}
 
 \subsection{Package Dataset}
-Il package Dataset include una serie di Dataset in formato csv ed una cartella contente le rispettive liste di RFD già precalcolate. 
+Il package Dataset include una serie di Dataset in formato $csv$ ed una cartella contente le rispettive liste di RFD già precalcolate. 
 I Dataset inclusi nel progetto sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
@@ -202,7 +201,7 @@ Il contenuto nella sottocartela csv comprende:
 \paragraph{csv{\_}parser.py}
 Questo modulo contiene la classe CSV Parser che si occupa di prendere i dati dai file CSV e salvarli in un dataframe, il tutto viene fatto nel metodo init.
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
 class CSVParser:
     def __init__(self, csv_path: str):
         self.path = csv_path
@@ -215,9 +214,10 @@ class CSVParser:
 \caption{Class CSVParser}
 \label{Code:1}
 \end{listing}
-L'operazione vera e propria di parsing e loading dei dati viene delegata al Framework Pandas, richiamando il metodo alla riga 5
+L'operazione vera e propria di $parsing$ e $loading$ dei dati viene delegata al Framework Pandas, richiamando il metodo alla riga 5
 Le variabili di questa classe sono:
 \begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
     \item path:[str] Contiene il path del file CSV
     \item delimiter:Contiene il carattere di separazione
     \item data{\_}frame:[Pandas Dataframe] Contiene i dati del file CSV letto
@@ -229,7 +229,7 @@ L'unico argomento da passare al costruttore è il path del file, tutti gli altri
 All'interno del costruttore è presente una chiamata al metodo {\_\_}guess{\_}delimiter:
 
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
     def __guess_delimiter(self):
 \end{minted}
 \caption{Guess delimiter}
@@ -241,7 +241,7 @@ Questo metodo ha il compito di indovinare il carattere di separazione leggendo i
 \paragraph{io.py}
 Questo modulo contiene la classe CSVInputOutput la quale si occupa di importare/esportare una Pandas.Dataframe da/in un file CSV
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[,frame=lines,linenos]{python}
     class CSVInputOutput:
 \end{minted}
 \caption{CSVInputOutput}
@@ -504,14 +504,14 @@ Segue ora una lista dei metodi che vengono richiamati:
         \item Viene effettuata una query unendo (con degli or) tutte le condizioni contenute nel DataFrame
         \item Il Result Set contenuto dalla query rilassata viene salvato in memoria.
     \end{itemize}
-    \item Viene restituito in output il Result Set meno ampio possibile, che sia però di cardinalità maggiore a quello restituito dalla query originale.
+    \item Viene restituito in output il Result Set meno ampio possibile, che sia però di cardinalità maggiore a quello restituito dalla query originale. Il Result set viene automaticamente salvato in un file formato JSON
 \end{enumerate}
 
 
 \section{Installazione}
 \paragraph{Requisiti}
-La versione di Python utilizzata è la 3.6.2 , è stata utilizzata la versione a x64.
-Dato che buona parte del codice richiama metodi scritti in Cython , serve un compilatore C++, è stato utilizzato un compilatore della Microsoft incluso nel pacchetto Visual Studio Community 2017 \\
+La versione di Python utilizzata è la 3.6.2 , è stata utilizzati su di un architettura a x64.
+Dato che buona parte del codice richiama metodi scritti in Cython , serve un compilatore C++. È stato utilizzato un compilatore della Microsoft incluso nel pacchetto Visual Studio Community 2017 \\
 Il progetto contiene le seguenti dipendenze:
 \begin{itemize}[noitemsep]
 \item[-] click $\geq$ 6.7
@@ -535,18 +535,26 @@ Il progetto contiene le seguenti dipendenze:
 \item[-] pip $\geq$ 9.0.1
 \item[-] setuptools $\geq$ 36.5.0
 \item[-] rfd-discovery $\geq$ 0.0.1
-
+\end{itemize}
 \paragraph{Installazione}
 
-\end{itemize}
-
-
-\section{Test}
-In questa sezione sono raccolti tutti i test effettuati sul progetto.
 \begin{enumerate}
 \item Scaricare Python (link: https://www.python.org/downloads/release/python-362/), fare attenzione a scegliere la versione in base all'architettura della macchina su cui verrà eseguito il software.
 \item Scaricare ed installare il pacchetto "Sviluppo applicazioni desktop con C++" ottenibile da Visual Studio Community 2017 (link: https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community\&rel=15)
 \item Aggiugere alla variabile di ambiente PATH i seguenti valori:\\ "D:\textbackslash Programmi\textbackslash VS\textbackslash VC\textbackslash Tools\textbackslash MSVC\textbackslash 14.11.25503\textbackslash bin\textbackslash HostX64\textbackslash x64"\\
-"C:\textbackslash Program Files (x86)\textbackslash Windows Kits\textbackslash 10\textbackslash bin\textbackslash x64"
-\item aprire il terminale
+"C:\textbackslash Program Files (x86)\textbackslash Windows Kits\textbackslash 10\textbackslash bin\textbackslash x64"\footnote{La posizione di tali cartelle può variare}
+\item Aprire il "Prompt dei comandi degli strumenti nativi x64(o x86 per sistemi a 32 bit) per VS 2017" ed eseguire il comando "python -m pip install -U pip setuptools"
+\item Scaricare il progetto (link: https://github.com/izio7/AttributedGraphProfiler)
+\item Spostarsi all'interno della Root del progetto ed aprire il terminale.
+\item Eseguire il comando "virtualenv venv" per creare un Virtual Environment in cui eseguire il progetto
+\item Eseguire il comando "venv\textbackslash Scripts \textbackslash activate" con cui si si accede al Virtual Environment \footnote{Sotto ambiene Linux\textbackslash MacOS il comando da eseguire è "source venv/bin/activate"}
+\item Eseguire il comando "pip install -r requirements.txt" per installare le dipendenze richieste.\footnote{Se si esegue il software in un ambiente di sviluppo dedicato questa operazione viene effettuata automaticamente}
+\item Eseguire il comando "python setup.py install"
+\item Eseguire i comando "python build.py build{\_}ext --inplace" per effettuare generare il codice C tramite Cython
+\item Ora il software è pronto per eseguire le Query rilassate, il main si trova all'interno della folder "query{\_}rewriter"
 \end{enumerate}
+
+
+\section{Test}
+In questa sezione sono raccolti tutti i test effettuati sul progetto.
+
