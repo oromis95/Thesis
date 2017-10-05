@@ -1,31 +1,30 @@
 \section{Incipit}
 
 In un modello relazionale, la scoperta delle dipendenza funzionali assume un ruolo importante durante la progettazione o normalizzazione. Già da molto queste dipendenze vengono utilizzate per migliorare la qualità dei database.
-Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, sia provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposto un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD o RFD) \footnote{In tutta la tesi Dipendenze Funzionali Approssimate e Dipendenze Funzionali Rilassate indicano lo stesso concetto vedi  definizione RFD} per catturare delle consistenze più ampie nei dati.
-Una volta individuate, queste RFD possono essere utilizzate in data cleaning sia in sistemi di query approssimate. In questa ci si è focalizzato sul rilassamento delle interrogazioni. Nei sistemi di query sorgono problemi quando effettuata l'interrogazione viene restituita una risposta vuota o non soddisfacente. In questi casi potrebbe interessare non solo gli elementi che combaciano esattamente con la query , ma anche quelli simili, se però possiedono qualche legame con la query.Qualsiasi motore di ricerca utilizza già un sistema per allargare il Result Set \footnote{Per Result Set si intende l'insieme di tuple (o risultati) restituiti da un interrogazione}, basta infatti allargare i range per ottenere un result set più ampio. Spesso però includere risultati che differiscono molto da ciò che cerchiamo non è utile, in questo caso sarebbe preferibile effettuare una nuova ricerca con parametri differenti che però restituisca dei risultati attinenti a ciò che viene cercato. Come si può effettuare questa cosa? Esiste qualche funziona che suggerisca cosa cercare quando su Amazon scrivendo "PC Gaming Dell" non escono risultati soddisfacenti? Ebbene si, un modo c'è! Implementando questa tecnica si può ricevere un suggerimento di ricerca come "I7 gtx 1080 SSD 256", questo tipo di sistema è in grado di capire che chi è interessato ad un Computer da Gaming della Dell probabilmente sarà attratto anche da un computer che possiede un processore i7, una scheda video gtx 1080 ed una SSD .
-Questa nuova conoscenza viene data dalle RFD.
-
+Negli ultimi anni abbiamo visto aumentare le fonti che generano dati, sia provenienti dal web, dalle reti di sensori, da reti biologiche. All’aumento della quantità di dati generata non è corrisposto un mantenimento della stessa qualità. Ovviamente con moli di dati elevate è inconcepibile tentare di effettuare un cleaning dei dati manualmente.In quest’ottica è però possibile utilizzare le dipendenze funzionali approssimate(AFD o RFD) \footnote{In tutta la tesi Dipendenze Funzionali Approssimate e Dipendenze Funzionali Rilassate indicano lo stesso concetto.} per catturare delle consistenze più ampie nei dati.
+Una volta individuate, queste RFD possono essere utilizzate sia in data cleaning, sia in sistemi di query approssimate. Durante il lavoro di tesi si è focalizzato sul rilassamento delle interrogazioni. Nei sistemi di query sorgono problemi quando effettuata l'interrogazione viene restituita una risposta vuota o non soddisfacente. In questi casi potrebbero interessare non solo gli elementi che combaciano esattamente con la query , ma anche quelli simili, se però possiedono qualche legame con la query. Qualsiasi motore di ricerca utilizza già un sistema per allargare il Result Set \footnote{Per Result Set si intende l'insieme di tuple (o risultati) restituiti da un interrogazione.}, basta infatti allargare i range di ricerca per ottenere un Result Set più ampio. Spesso però includere risultati che differiscono molto da ciò che cerchiamo non è utile, in questo caso sarebbe preferibile effettuare una nuova ricerca con parametri differenti che però restituisca dei risultati attinenti a ciò che viene cercato inizialmente. Come si può effettuare questa cosa? Esiste qualche funzione che suggerisca cosa cercare quando su Amazon scrivendo "PC Gaming Dell" non escono risultati soddisfacenti? Ebbene si, un modo c'è! Implementando questa tecnica si può ricevere un suggerimento di ricerca come "I7 gtx 1080 SSD 256". Questo tipo di sistema è in grado di capire che chi è interessato ad un Computer da Gaming della Dell probabilmente sarà attratto anche da un computer che possiede un processore i7, una scheda video gtx 1080 ed una SSD .
+Questo link fra "PC Gaming Dell" e "I7 gtx 1080 SSD 256" viene dato dalle RFD.
 
 \section{Utilizzo delle FD in contesti particolari}
 
-In alcuni contesti non è possibile utilizzare le FD canoniche, in quanto il concetto di uguaglianza non esiste. In questi casi vengono applicati delle funzioni di similarità ad-hoc. Gli esempi più banali cominciano dalle stringhe dove per misurare la differenza fra due di esse si usa la Distanza di Levenshtein, o dalla data  dove per effettuare un confronto bisogna implementare il calendario gregoriano. In alcuni ambiti invece le funzioni di similarità aumentano di complessità, si pensi a come può essere strutturata una funzione di similarità in un sistema multimediale. In molti casi è opportuno implementare una fonte di conoscenza esterna, come ad esempio in un database riguardante le città europee conviene utilizzare una funzione che ne misuri la distanza spaziale piuttosto che la somiglianza lessicale. Le FD canoniche non ammettono l'esistenza di un funzione di similarita, in questo caso si preferiscono utilizzare le AFD.
+In alcuni contesti non è possibile utilizzare le FD canoniche, in quanto il concetto di uguaglianza non esiste. In questi casi vengono applicati delle funzioni di similarità ad-hoc. Gli esempi più banali cominciano dalle stringhe , dove per misurare la differenza fra due di esse si usa la Distanza di Levenshtein\footnote{La distanza di Levenshtein è una misura per la differenza di stringhe, dove si tiene conto lettere mancanti, sbagliate o superflue.}, o dalla data  dove per effettuare un confronto bisogna implementare il calendario gregoriano. In alcuni ambiti invece le funzioni di similarità aumentano di complessità, si pensi a come può essere strutturata una funzione di similarità in un sistema multimediale. In molti casi è opportuno implementare una fonte di conoscenza esterna, come ad esempio in un database riguardante le città europee dove conviene utilizzare una funzione che ne misuri la distanza spaziale piuttosto che la somiglianza lessicale. Le FD canoniche non ammettono l'esistenza di un funzione di similarità, in questo caso si preferiscono utilizzare le RFD.
 
 \section{Ricerca di RFD}
-Gli algoritmi di ricerca delle AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, la complessità è riconducibile al problema di trovare un minimal cover set di RFD verificate per una relazione r. Ciò al momento pone un forte fardello sullo sviluppo di software che sfruttano le AFD. Con database che superano le migliaia di righe è ancora impossibile l’approccio. In questo lavoro di tesi non sono stati utilizzati DataSet troppo ampi in quanto il tempo richiesto per generare le RFD era spropositato. Al momento vi sono alcuni team che stanno lavorando sulla parallelizzazione dell'algoritmo di ricerca, si sono già ottenuti ottimi risultati durante la fase di testing, si è arrivati ad ottenere un aumento delle performance pari al 75%.
+Gli algoritmi di ricerca delle RFD o AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, la complessità è riconducibile al problema di trovare un insieme ricoprente minimale di RFD verificate per una relazione $r$. Ciò al momento pone un forte fardello sullo sviluppo di software che sfrutta le RFD. Con database che superano le migliaia di righe è ancora impossibile l’approccio. In questo lavoro di tesi non sono stati utilizzati DataSet troppo ampi in quanto il tempo richiesto per generare le RFD era spropositato. Al momento vi sono alcuni team che stanno lavorando sulla parallelizzazione dell'algoritmo di ricerca, si sono già ottenuti ottimi risultati durante la fase di testing, si è arrivati ad ottenere un aumento delle performance pari al 75\%.
 
 
 \section{Studi Preliminari}
 Prima di cominciare il lavoro relativo al sistema di Query Relaxation è stato necessario studiare il linguaggio Python.
 La scelta è ricaduta su Python per tre motivi principali:
 \begin{enumerate}
-    \item È un linguaggio che seppur orientato agli oggetti, possiede delle librerie quali: Cython, ecc.. le quali permettono di aumentare la velocità eseguendo il codice in C
+    \item È un linguaggio che seppur orientato agli oggetti, possiede delle librerie quali: Cython, ecc.. le quali permettono di aumentare la velocità eseguendo il codice in C.
     \item Il sistema esistente di discovery di RFD è stato sviluppato in Python, ed anche se il nostro modulo ne è indipendente, si è preferito utilizzare lo stesso linguaggio.
-    \item Per ampliare le competenze, possedere un progetto sviluppato in Python 
+    \item Per ampliare le competenze, possedere un progetto sviluppato in Python .
 \end{enumerate}
 Oltre le principali tecniche di programmazione sono stati utilizzati alcune particolari funzionalità del Python:
 
 \begin{itemize}
-\item List Comprehensions:uno strumento che permette di creare in modo conciso e conveniente delle liste partendo da una sequenza di valori esistenti, inoltre le comprehension permettono anche di filtrare e trasformare gli elementi tramite costrutti if.
+\item List Comprehensions: Uno strumento che permette di creare in modo conciso e conveniente delle liste partendo da una sequenza di valori esistenti, inoltre le comprehension permettono anche di filtrare e trasformare gli elementi tramite costrutti if.
 Normalmente per creare delle liste si procede in questo modo:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
@@ -58,7 +57,7 @@ print(double(5))
 10
 \end{minted}
 \end{listing}
-\list Iterazione su chiave-valore: è possibile iterare sui dizionari ottenendo contemporaneamente chiave e valore.
+\item Iterazione su chiave-valore: è possibile iterare sui dizionari ottenendo contemporaneamente chiave e valore.
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
 >>> m = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
@@ -78,7 +77,6 @@ Oltre le librerie standard sono stati utilizzati alcuni Framework esterni:
 \begin{itemize}
 \item Pandas: È una libreria che include delle strutture dati e tool di analisi facili da usare e fortemente ottimizzate. 
 \item Numpy : È un package dedicato all'elaborazione scientifica sul linguaggio Python.
-
 \end{itemize}
 All'infuori delle conoscenze legate ai linguaggi di programmazione , è stato necessario leggere e studiare vari documenti legati al mondo delle dipendenze funzionali. La maggior parte del tempo è stata impiegata per capire in che modo utilizzare le RFD. 
 È stato necessario comprendere il funzionamento(visione black-box) dell’algoritmo utilizzato nel progetto di IA. 
@@ -119,8 +117,8 @@ di attributi $Y \subseteq X$, $t[Y]$ rappresenta la proiezione di $Y$ su $t$.\ci
 
 
 \subsection{Dipendenze funzionali canoniche}
-Data una relazione $r$ su uno schema $R(X)$ e due sottoinsiemi di attributi non vuoti $Y$ e $Z$ di $X$,diremo che esiste su $r$ una dipendenza funzionale tra gli attributi $Y$ e $Z$, se, per ogni coppia di tuple $t_1$ e $t_2$ di $r$ aventi gli stessi valori sugli attributi $U$, risulta che $t_1$ e $t_2$ hanno gli stessi valori anche sugli attributi $Z$.
-Generalmente indichiamo una dipendenza funzionale tra gli attributi $Y$ e $Z$ con la notazione $Y->Z$ e viene associata ad uno schema.
+Data una relazione $r$ su uno schema $R(X)$ e due sottoinsiemi di attributi non vuoti $Y$ e $Z$ di $X$,diremo che esiste su $r$ una dipendenza funzionale\footnote{Il termine Dipendenza Funzionale nella tesi viene spesso abbreviato in FD (Functional Dependency)} tra gli attributi $Y$ e $Z$, se, per ogni coppia di tuple $t_1$ e $t_2$ di $r$ aventi gli stessi valori sugli attributi $U$, risulta che $t_1$ e $t_2$ hanno gli stessi valori anche sugli attributi $Z$.
+Generalmente indichiamo una dipendenza funzionale tra gli attributi $Y$ e $Z$ con la notazione $Y->Z$ , ogni FD  viene associata ad uno schema.
 
 Dato che le dipendenza funzionali dovrebbero servire a descrivere proprietà significative della applicazione, è necessario separare dalle dipendenze funzionali le dipendenze funzionali banali.
 In generale una dipendenza funzionale $Y->A$ è non banale se $A$ non compare tra gli attributi di $Y$
@@ -129,10 +127,10 @@ Un'ultima osservazione va fatta sul legame presente tra il concetto di dipendenz
 In alcuni casi per risolvere dei problemi in alcuni di domini di applicazioni, come l’identificazione di inconsistenze tra i dati, o la rilevazione di relazioni semantiche fra i dati,  è necessario rilassare la definizione di dipendenza funzionale, introducendo delle approssimazioni nel confronto dei dati. Invece effettuare dei controlli di uguaglianza , si utilizzano dei controlli di similarità .
 Inoltre spesso si potrebbe desiderare che una certa dipendenza valga solo su un sottoinsieme di tuple che su tutte.
 Per questo motivo sono nate delle dipendenze funzionali che rilassano alcuni dei vincoli delle FD , prendono il nome di Dipendenze Funzionali Rilassate o Approssimate \footnote{RFD abbreviazione di Relaxed Functional Dependency}.
-Esistono differenti tipi di RFD, ciascuna di esse rilassa uno o più vincoli delle FD e si possono dividere in due macro aree:
+Esistono differenti tipi di RFD, ciascuna di esse rilassa uno o più vincoli delle FD , si possono dividere in due macro aree:
 \begin{enumerate}
-    \item Confronto di attributi: la funzione di uguaglianza delle FD canoniche viene sostituita da una funzione di similarità , ciò implica che l'AFD deve descrivere una soglia di rilassamento per ogni attributo.
-    \item Estensione: permette che il vincolo non sia valido su tutte le tuple, ma solo su di un sottoinsieme di esse
+    \item Confronto di attributi: La funzione di uguaglianza delle FD canoniche viene sostituita da una funzione di similarità , ciò implica che l'AFD deve descrivere una soglia di rilassamento per ogni attributo.
+    \item Estensione: Permette che il vincolo non sia valido su tutte le tuple, ma solo su di un sottoinsieme di esse
 \end{enumerate}
 
 
@@ -161,7 +159,7 @@ La struttura delle RFD utilizzate è la seguente:
 \centerline{$attr_1(\leq soglia_1),\ldots$,$attr_n(\leq soglia_n) \xrightarrow{} RHS$}
 \\~\\
 Gli attributi che si trovano a sinistra della freccia costituiscono la parte LHS\footnote{Left Hand Size o lato sinistro}, l'attributo che invece si trova dopo la freccia costituisce l'RHS\footnote{Right Hand Size o lato destro}. 
-È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante le RFD , bensì riguarda qualsiasi tipo di dipendenza funzionale.
+È importante focalizzare l'attenzione su questo concetto in quanto le dipendenze funzionali hanno un verso, ed è quello indicato dalla freccia. Qualsiasi operazione effettuata con le RFD deve sempre tener conto del verso, le RFD non forniscono conoscenza nel verso opposto. Questa non è una proprietà riguardante solo le RFD , bensì riguarda qualsiasi tipo di dipendenza funzionale.
 Ad esempio consideriamo la relazione in questa tabella:
 \begin{table}[H]
     \centering
@@ -184,10 +182,10 @@ Ad esempio consideriamo la relazione in questa tabella:
     \caption{Esempio di Relazione con anomalie}
     \label{tab:relationship_anomalies}
 \end{table}
-Si può osservare che lo stipendio di ciascun impiegato è unico, quindi in ogni tupla in cui compare lo stesso impiegato verrà riportato lo stesso stipendio. Possiamo dire che esiste una Dipendenza Funzionale 
-$Impiegato \xrightarrow{} Stipendio$
-Si può fare lo stesso discorso tra gli attributi Progetto e Bilancio, quindi anche qui abbiamo una dipendenza funzionale.
-$Progetto\xrightarrow{}Bilancio$
+Si può osservare che lo stipendio di ciascun impiegato è unico, quindi in ogni tupla in cui compare lo stesso impiegato verrà riportato lo stesso stipendio. Possiamo dire che esiste una Dipendenza Funzionale: 
+$Impiegato \xrightarrow{} Stipendio$. 
+Si può fare lo stesso discorso tra gli attributi Progetto e Bilancio, quindi anche qui abbiamo una dipendenza funzionale
+$Progetto\xrightarrow{}Bilancio$. 
 Non si può dire che di conseguenza vale anche il verso opposto:
 \\~\\
 \centerline{$Impiegato \xrightarrow{} Stipendio \neq Stipendio \xrightarrow{} Impiegato$} 
@@ -203,15 +201,15 @@ Inizialmente si genera un grafo di attributi, definito in una struttura a lattic
 \item livello 0: non contiene alcun attributo
 \item livello 1: contiene i singleton di ogni attributi
 \item livello 2: contiene tutte le possibili coppie di attributi
-\item livello …..
+\item livello \ldots
 \item livello n: contiene tutto l’insieme di attributi.
 \end{itemize}
 Ogni sottoinsieme contenuto in uno di questi livelli è candidato per una possibile RFD.
-L’algoritmo parte del livello 0 , e per ogni livello controlla per tutti i sottoinsiemi $X \in L_r$ ,l’esistenza di dipendenze funzionali.
+L’algoritmo parte del livello 0  e per ogni livello controlla, per tutti i sottoinsiemi $X \in L_r$ ,l’esistenza di dipendenze funzionali.
 Il funzionamento preciso è definito da:
 per ogni $A \in X$ si cerca di controllare se la $FD$  $X\setminus A \xrightarrow{}  A $ vale. Questo tipo di algoritmo ha complessità esponenziale.
 
-Principalmente di questo software è stato studiato cosa prende in input e cosa restituisce in output
+Di questo software non ne è stato studiato il funzionamento white-box, bensì si è preferito un approccio black-box focalizzandosi su cosa prende in input e cosa restituisce in output.
 
 \subsection{Input}
 Il programma prende in input un Dataset in formato csv.
@@ -236,7 +234,7 @@ Il primo è sotto forma di Pandas Dataframe:
 \end{table}
 
 
-Nel caso in cui si avvia il programma specificando l’opzione “-human” si ottengono le RFD nel seguente formato:
+Mentre il secondo formato ottenuto avviando il programma specificando l’opzione “-human” è in un formato leggibile ma non portabile:
 \\~\\
 \centerline{$attr_1(\leq soglia_1),attr_2(\leq soglia_2),\ldots,{attr_n}(\leq soglia_n)->RHS(\leq soglia_{rhs})$}
 \\~\\
