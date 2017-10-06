@@ -14,14 +14,14 @@ L'utente riceverà in output un Result Set contenente una serie di auto modello 
 Qui sorge un problema, nella realtà ampliare in vincolo piuttosto che un altro ha un suo peso. Ad esempio un utente potrebbe essere disposto maggiormente a cambiare modello d'auto piuttosto che aumentare il budget della spesa. Ciò dimostra che è necessario un sistema di rilassamento che dia possibilità all'utente di stabilire quali siano gli attributi più importanti, che quindi non devono essere modificati, e quali siano gli attributi di importanza secondaria, sui quali l'utente è disposto ad adattarsi. 
 \section{Tecniche di Relaxing}
 \paragraph{Rilassamento banale}
-Qualsiasi motore di ricerca implementa delle funzionalità di relaxing.
+Qualsiasi motore di ricerca implementa delle funzionalità di Relaxing.
 Il sistema più semplice è quello di ampliare gradualmente tutti i vincoli di una query, in alcuni casi si arriva anche ad eliminarne alcuni.
 Quasi sicuramente questo tipo  di rilassamento produce ulteriori risultati, spesso ne arriva a produrre anche troppi.
 \paragraph{Rilassamento basato sulla teoria fuzzy degli insiemi}
 Vi alcuni algoritmi \cite{generalfuzzy} \cite{emptyvs} che rilassano i vincoli della query utilizzando un misto di funzioni membership , conoscenza del dominio applicativo e operazione di teoria fuzzy come le $\alpha-cut$
 \paragraph{Rilassamento basato su sistemi collaborativi}
 Probabilmente questo è il sistema più interessante, se non anche il più utilizzato. Il criterio di rilassamento è basato su sofisticate funzioni di distanza \footnote{Spesso queste funzioni richiedono della conoscenza esterna, ad esempio una funzione per il calcolo delle distanze fra due città necessità di un database contenente tutti questi dati.}, conoscenza della distribuzione interna di un Database. 
-Questo tipo di rilassamento è fortemente vincolato dal database a cui si applica. L'ottenimento di risultati migliori è direttamente proporzionale alla quantità di $conoscenza$ della distribuzione del database, questo tipo di dati è estrabile con un forte dispendio computazionale in quanti si richiede l'analisi dell'interno Database.  In questa tipologia di rilassamento rientra il sistema di Query Relaxation sviluppato durante il lavoro di tesi.
+Questo tipo di rilassamento è fortemente vincolato dal database a cui si applica. L'ottenimento di risultati migliori è direttamente proporzionale alla quantità di $conoscenza$ della distribuzione del database, questo tipo di dati è estraibile con un forte dispendio computazionale in quanti si richiede l'analisi dell'interno Database.  In questa tipologia di rilassamento rientra il sistema di Query Relaxation sviluppato durante il lavoro di tesi.
 
 \section{Tecniche di cleaning del risultato}
 Quando viene restituito un Result Set troppo ampio esistono due approcci principali:
@@ -36,6 +36,6 @@ Alcuni sistemi permettono all'utente di specificare quale parametro possiede imp
 \paragraph{Basata su conoscenza indiretta}
 Oltre le preferenze degli utenti si tiene conto di alcuni parametri che sono estraibili con delle analisi del Database e delle query su di esso effettuate.
 Rientrano in questo campo gli approcci basati su Dipendenze Funzionali Approssimate.
-Una tecnica interessante è quella di controllare quale risultato ha maggiore probabilità. Effettuando una ricerca di un prodotto su degli store online si notano spesso ai primi posti prodotti ,che seppur non corrispondenti completamente alla query, hanno un alto tasso di vendite. 
+Una tecnica interessante è quella di controllare quale risultato ha maggiore probabilità. Effettuando una ricerca di un prodotto su degli Store online si notano spesso ai primi posti prodotti ,che seppur non corrispondenti completamente alla query, hanno un alto tasso di vendite. 
 
 
