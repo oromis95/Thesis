@@ -107,7 +107,7 @@ Le variabili di questa classe sono:
 Questa classe possiede due metodi.
 Il primo è il metodo store
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
     def store(self, df: pd.DataFrame, path: str):
 \end{minted}
 \caption{store method}
@@ -117,7 +117,7 @@ Questo metodo prende in input il path del del file in cui andare a salvare il Da
 
 Il secondo è il metodo load
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
     def load(self, path: str) -> pd.DataFrame:
 \end{minted}
 \caption{load method}
@@ -137,7 +137,7 @@ La seconda sottocartella rfd contiene vari moduli inerenti alla manipolazione de
 È contiene la classe RFDExtractor che si occupa di estrarre le RFD da un dataset
 rfd{\_}extractor.py
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
 class RFDExtractor:
     ...
     def __init__(self, args, debug_mode=False) -> None:
@@ -169,7 +169,7 @@ Non saranno fornite particolari informazioni su questa classe , in quanto essa f
 È un modulo che ha funzione di wrapping per l'algoritmo di ricerca di RFD.
 Contiene due metodi:
 \begin{listing}[H]
-\begin{minted}[bgcolor=black,frame=lines,linenos]{python}
+\begin{minted}[frame=lines,linenos]{python}
 def diff(list1: list, list2: list):
 ...
 def search_rfds(csvPath,name_rfds_file):
@@ -330,31 +330,31 @@ dove:
 e [options] può contenere zero o più delle seguenti opzioni:
 
 \begin{itemize}
-\item -r $<$rfds-path$>$ : nome del file in cui sono salvate le RFD, se non viene fornito le RFD vengono calcolate
-\item -n $<$number-of-test$>$ : numero di RFD da testare, se non viene fornito il test viene effettuato per tutte le RFD contenute nella lista
-\item -o $<$path-output$>$ : nome del file in cui salvare l'output del processo di Query Relaxing
+\item -r $<$rfds-path$>$ : nome del file in cui sono salvate le RFD, se non viene fornito le RFD vengono calcolate.
+\item -n $<$number-of-test$>$ : numero di RFD da testare, se non viene fornito il test viene effettuato per tutte le RFD contenute nella lista.
+\item -o $<$path-output$>$ : nome del file in cui salvare l'output del processo di Query Relaxing.
 \end{itemize}
 
 
 \paragraph{Metodo main()}
-Il metodo main è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process()
+Il metodo main() è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process()
 
 \paragraph{Metodo start{\_}process()}
 Questo metodo rappresenta il core del software, incapsula tutti i processi di Query Relaxation.
 Segue ora una lista dei metodi che vengono richiamati:
 \begin{enumerate}
     \item Inizialmente si occupa di leggere il DataSet richiamando i metodi della classe CSVInputOutput.
-    \item Viene effettuato il carimento della lista di RFD, se tale file non esiste viene generato
-    \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodichè viene ordinato
+    \item Viene effettuato il caricamento della lista di RFD, se tale file non esiste viene generato
+    \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodiché viene ordinato
     \item Per ogni RFD i contenuta nella lista \footnote{Vi è un parametro per specificare il numero massimo di RFD da testare} si itera nel seguente modo :
     \begin{itemize}
-        \item Si effettua una query estesa rispetto alle soglie della RFD i-esima
-        \item Vengono caricati ,dal Result Set ,tutti i valori degli attributi che sono nella parte RHS della query, inoltre vengono caricati anche i valori degli attributi LHS che non sono nella query. Viene mantenuto un DataFrame per ogni tupla risultante nel Result Set
+        \item Si effettua una query estesa rispetto alle soglie della RFD i-esima.
+        \item Vengono caricati ,dal Result Set ,tutti i valori degli attributi che sono nella parte RHS della query, inoltre vengono caricati anche i valori degli attributi LHS che non sono nella query. Viene mantenuto un DataFrame per ogni tupla risultante nel Result Set.
         \item Tutti i valori nei DataFrame generati precedentemente vengono estesi rispetto alla soglie della RFD i-esima.
-        \item Viene effettuata una query unendo (con degli or) tutte le condizioni contenute nel DataFrame
+        \item Viene effettuata una query unendo (con degli or) tutte le condizioni contenute nel DataFrame.
         \item Il Result Set contenuto dalla query rilassata viene salvato in memoria.
     \end{itemize}
-    \item Viene restituito in output il Result Set meno ampio possibile, che sia però di cardinalità maggiore a quello restituito dalla query originale. Il Result set viene automaticamente salvato in un file formato JSON
+    \item Viene restituito in output il Result Set meno ampio possibile, che sia però di cardinalità maggiore a quello restituito dalla query originale. Il Result set viene automaticamente salvato in un file formato JSON.
 \end{enumerate}
 
 
