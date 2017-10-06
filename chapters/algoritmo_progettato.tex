@@ -106,11 +106,20 @@ Nella tabella sottostante viene mostrata parte di una lista di RFD ordinata \foo
 D'ora in poi tutta la procedura descritta da qui in avanti verrà iterata per un numero di RFD pari ad un valore definito dall'utente. \footnote{In caso in cui l'utente lasci il campo vuoto, l'iterazione viene effettuata per ogni RFD presente nella lista}
 Viene selezionata la i-esima RFD con $i\in[1,n]$. 
 Si vanno a considerare gli attributi della RFD che siano presenti nella query\footnote{In questo momento si considerano solo gli attributi in LHS}, si prendono le soglie e si effettua una nuova una query estesa $Q_2$
-Ad esempio supponendo che la query iniziale sia: \\~\\ \centerline{SELECT * FROM dataset{\_}string WHERE height=169} \\~\\ e che la RFD selezionata sia: \\~\\ \centerline{$(height \leq 0.0)  \rightarrow(shoe_size \leq 0.0)$} \\~\\
+Ad esempio supponendo che la query iniziale sia: 
+\\~\\ 
+\centerline{SELECT * FROM dataset{\_}string WHERE height=169} 
+\\~\\
+e che la RFD selezionata sia: 
+\\~\\ 
+\centerline{$(height \leq 0.0)  \rightarrow(shoe_size \leq 0.0)$}
+\\~\\
 Viene effettuato un controllo sul tipo di valori degli attributi della query,
 si vanno a identificare tipi string, int e float, questa identificazione serve a specificare quale funzione di distanza bisogna applicare durante l'estensione della query.
-Dato che $height$ è un attributo di tipo numerico, si vanno a prendere tutti i valori che differiscono di 0 dal valore iniziale inserito dall'utente. In questo caso la query estesa $Q_2$ resta uguale a $Q_1$: \\~\\ 
-\centerline{SELECT * FROM dataset{\_}string WHERE height =169} \\~\\
+Dato che $height$ è un attributo di tipo numerico, si vanno a prendere tutti i valori che differiscono di 0 dal valore iniziale inserito dall'utente. In questo caso la query estesa $Q_2$ resta uguale a $Q_1$: 
+\\~\\
+\centerline{SELECT * FROM dataset{\_}string WHERE height =169} 
+\\~\\
 Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dall query iniziale.
 In questo caso entrambe le query restituiscono questo risultato: \newline 
 \begin{table}[H]
