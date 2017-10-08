@@ -3,9 +3,67 @@
 Durante il lavoro di tesi sono stati svolti alcuni test. 
 Si possono evidenziare tre gruppi:
 \begin{itemize}
-    \item Test di "Reverse Enginnering"
-    \item Test di controllo 
+    \item Test per il \textit{Reverse Engineering}
+    \item Test di integrità 
     \item Test di prestazione
 \end{itemize}
+
+\subsection{Test per il Reverse Engineering}
+Il progetto riguardante la ricerca di dipendenze funzionali rilassate non possedeva una documentazione esaustiva. Per tale motivo si è deciso di creare delle classi Test, che avessero il compito di mostrare il processo effettuato da ogni modulo.
+Le classe di test create sono:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item diff{\_}test.py : utilizzata per comprendere il funzionamento della classe che genera la matrice delle differenze.
+    \item relaxer{\_}test.py: utilizzata per testare la classe QueryRelaxer.
+    \item rfd{\_}extractor{\_}test.py utilizzata per testare il modulo che funge da Bridge per l'algoritmo di ricerca di RFD.
+\end{itemize}
+
+\subsection{Test di integrità}
+Durante lo sviluppo sono state create delle classi per il testing. Seppur non paragonabili a dei test di unità sono state utili per controllare il funzionamento di ogni singolo modulo.
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item io{\_}test.py: utilizzata per testare la classe RFDInputOutput().
+    \item csv{\_}parser{\_}test.py : utilizzata per controllare il corretto funzionamento della classe CSVParser. 
+    \item csv{\_}test.py: utilizzata per controllare la corretta estrazione dell'header.
+    \item dataframe{\_}row{\_}slicer{\_}test.py : utilizzata per controllare il corretto funzionamento della classe Slicer.
+    \item similar{\_}strings{\_}test.py utilizzata per testare la funzionalità di ricerca di stringhe simili.
+\end{itemize}
+\subsection{Test di prestazione}
+Per misurare le prestazioni non è stato creato un modulo ad hoc, bensì sono stati eseguiti due gruppi di test manuali:
+Il primo gruppo di test è servito a testare la bontà dell'ordinamento delle RFD. 
+Un buon ordinamento di RFD deve porre prima le RFD che ampliano il Result Set di poco,
+in modo tale da evitare di produrre un Result Set che contengano dati poco inerenti all'interrogazione iniziale.
+Per effettuare questo controllo sono stati dichiarate tre variabili:
+\begin{itemize}
+    \item original{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito inzialmente.
+    \item relaxed{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
+    \item dataset{\_}size : una variabile che contiene la cardinalità del Dataset
+\end{itemize}
+
+Segue una lista di alcuni test effettuati.
+%test da aggiungere
+
+
+Si è deciso di applicare un ottimizzazione sulla ricerca dell'RFD migliore. 
+Ogni volta che viene effettuata una Query Rilassata, prima restituire il Result Set, vengono testate le prime N RFD.
+Grazie a questi variabili è possibile controllare quanto aumenta la cardinalità del Result Set per ogni RFD. Viene quindi restituita l'RFD che produce il Result Set meno ampio possibile che sia però maggiore del Result Set restituito dalla query iniziale. In questo modo si cercano di ottenere i risultati che siano maggiormente correlati con l'interrogazione iniziale.
+
+Il secondo gruppo di test è stato eseguito verificare quanto tempo chiedesse l'algoritmo.
+Si deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quanto non dipendendo direttamente dal lavoro sviluppato.
+
+%allegare test tempo.
+
+\section{Riflessioni}
+Dopo aver completato la descrizione del progetto sviluppato è necessario fare qualche osservazione.
+L'idea iniziale non è era quella di sviluppare un modulo professionale che permetta il rilassamento di query, bensì lo scopo principale è stato quello di dimostrare che è possibile creare un sistema di rilassamento basato sulle RFD.
+Il progetto è da considerarsi completo, in quanto si riesce sempre ad ottenere un rilassamento.
+Vi sono ovviamente diverse imperfezioni \footnote{Nei lavori futuri si suggerisce come e se implementare una soluzione} che andrebbero curate, il progetto è stato sviluppato in modo tale 
+
+
+
+
+
+
+
 \section{Riflessioni}
 \section{Lavori futuri}
