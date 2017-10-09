@@ -1,11 +1,11 @@
-Oggigiorno dato l'ampio utilizzo del World Wide Web, soprattutto riguardo la ricerca e l'estrazione di informazioni, i sistemi di interrogazione hanno assunto ruolo fondamentale.
-Normalmente una ricerca può avere due risultati: esito positivo se esiste un oggetto che corrisponde ai parametri cercati ed esito negativo se tale oggetto non esiste.Nell'ambito Web il concetto di ricerca viene modificato, e il risultato non è solo un "Si" o un "No" , di conseguenza nei database che  sono molto ampi spesso si possono verificare due problemi principali:
+Oggigiorno dato l'ampio utilizzo del World Wide Web, soprattutto riguardo la ricerca e l'estrazione di informazioni, i sistemi di interrogazione hanno assunto un ruolo fondamentale.
+Normalmente una ricerca può avere due risultati: esito positivo se esiste un oggetto che corrisponde ai parametri cercati ed esito negativo se tale oggetto non esiste. Nell'ambito Web il concetto di ricerca viene modificato, e il risultato non è solo un "Si" o un "No", di conseguenza nei database che  sono molto ampi spesso si possono verificare due problemi principali:
 \begin{enumerate}
     \item Risposta vuota: Il Result Set restituito da un interrogazione è vuoto o contiene pochi elementi. In questo caso l'utente potrebbe desiderare di rilassare in qualche modo la query, ottenendo cosi ulteriori risultati che siano in qualche modo correlati con le preferenze espresse inizialmente.
     \item Risposta troppo ampia: Quando la query non è troppo selettiva si rischia di ottenere un Result Set troppo ampio. In questo caso è naturale voler avere qualche sistema che ordini i risultati ottenuti in base ad un criterio di ranking che dovrebbe dare precedenza ad elementi che siano di  interesse maggiore per l'utente.
 \end{enumerate}
 
-Per quanto riguarda il primo problema, la ricerca ha proposto varie soluzioni. L'idea iniziale è quella di ridurre i vincoli della query originale. Alcune soluzioni più raffinate applicano un criterio di ordinamento degli attributi in base alle preferenze dell'utente. Effettuando un query del tipo
+Per quanto riguarda il primo problema, la ricerca ha proposto varie soluzioni. L'idea iniziale è quella di ridurre i vincoli della query originale. Alcune soluzioni più raffinate applicano un criterio di ordinamento degli attributi in base alle preferenze dell'utente. Effettuando un query del tipo:
 \\~\\
 \centerline{SELECT * FROM CarDB WHERE Model=Camry and Price$<$10000}
 \\~\\
@@ -17,7 +17,7 @@ Qualsiasi motore di ricerca implementa delle funzionalità di Relaxing.
 Il sistema più semplice è quello di ampliare gradualmente tutti i vincoli di una query, in alcuni casi si arriva anche ad eliminarne alcuni.
 Quasi sicuramente questo tipo  di rilassamento produce ulteriori risultati, spesso ne arriva a produrre anche troppi.
 \paragraph{Rilassamento basato sulla teoria fuzzy degli insiemi}
-Vi alcuni algoritmi \cite{generalfuzzy} \cite{emptyvs} che rilassano i vincoli della query utilizzando un misto di funzioni membership , conoscenza del dominio applicativo e operazione di teoria fuzzy come le $\alpha-cut$
+Vi sono alcuni algoritmi \cite{generalfuzzy} \cite{emptyvs} che rilassano i vincoli della query utilizzando un misto di funzioni membership, conoscenza del dominio applicativo e operazione di teoria fuzzy come le $\alpha-cut$.
 \paragraph{Rilassamento basato su sistemi collaborativi}
 Probabilmente questo è il sistema più interessante, se non anche il più utilizzato. Il criterio di rilassamento è basato su sofisticate funzioni di distanza \footnote{Spesso queste funzioni richiedono della conoscenza esterna, ad esempio una funzione per il calcolo delle distanze fra due città necessità di un database contenente tutti questi dati.}, conoscenza della distribuzione interna di un Database. 
 Questo tipo di rilassamento è fortemente vincolato dal database a cui si applica. L'ottenimento di risultati migliori è direttamente proporzionale alla quantità di $conoscenza$ della distribuzione del database, questo tipo di dati è estraibile con un forte dispendio computazionale in quanti si richiede l'analisi dell'interno Database.  In questa tipologia di rilassamento rientra il sistema di Query Relaxation sviluppato durante il lavoro di tesi.
@@ -35,6 +35,6 @@ Alcuni sistemi permettono all'utente di specificare quale parametro possiede imp
 \paragraph{Basata su conoscenza indiretta}
 Oltre le preferenze degli utenti si tiene conto di alcuni parametri che sono estraibili con delle analisi del Database e delle query su di esso effettuate.
 Rientrano in questo campo gli approcci basati su Dipendenze Funzionali Approssimate.
-Una tecnica interessante è quella di controllare quale risultato ha maggiore probabilità. Effettuando una ricerca di un prodotto su degli Store online si notano spesso ai primi posti prodotti ,che seppur non corrispondenti completamente alla query, hanno un alto tasso di vendite. 
+Una tecnica interessante è quella di controllare quale risultato ha maggiore probabilità. Effettuando una ricerca di un prodotto su degli Store online si notano spesso ai primi posti prodotti, che seppur non corrispondenti completamente alla query, hanno un alto tasso di vendite. 
 
 
