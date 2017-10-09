@@ -1,9 +1,86 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse hendrerit eros quis ornare malesuada. Cras pretium metus velit, ut dignissim ligula interdum et. Suspendisse et magna risus. Mauris lorem mauris, porta non dolor a, fermentum ultricies nulla. Nam vestibulum mi ante, a scelerisque massa consectetur quis. Praesent pharetra maximus augue, at placerat mauris scelerisque sit amet. Vestibulum egestas, nisl non elementum rhoncus, mauris neque fermentum ipsum, blandit blandit augue turpis id lectus. Quisque porta bibendum ex, quis pretium turpis auctor ac. Nam in est et eros scelerisque dignissim nec ac ex. Proin scelerisque sapien viverra tortor hendrerit eleifend.
+\section{Test}
+Durante il lavoro di tesi sono stati svolti alcuni test. 
+Sono stati eseguiti su una macchina con sistema operativo Windows 10, un processore Intel Core i7 6700HQ a 2.60GHz (6M Cache, up to 3.50 GHz) e con 16Gb di RAM DDR4.
 
-Cras scelerisque turpis dui, vitae sagittis orci pharetra non. Donec facilisis ex et turpis bibendum, quis tristique nulla consectetur. Nulla facilisi. Pellentesque eu sagittis nisi, eu egestas erat. Quisque sodales luctus blandit. Sed finibus sapien sit amet eros scelerisque cursus vel cursus enim. Cras sagittis elit felis, ac blandit arcu faucibus eu. Sed ullamcorper mi sit amet rutrum sollicitudin. Integer sodales consequat ligula, in pharetra nulla pellentesque sit amet. Donec pharetra elit pellentesque pretium tincidunt.
+Si possono evidenziare tre gruppi:
+\begin{itemize}
+    \item Test per il \textit{Reverse Engineering}
+    \item Test di integrità 
+    \item Test di prestazione
+\end{itemize}
 
-Aliquam erat volutpat. Quisque quis elit tellus. Integer et efficitur dolor. Duis faucibus lectus sed nibh rutrum, nec imperdiet nisl pulvinar. In pellentesque nisi vitae mi imperdiet posuere. Morbi consequat, sem ut iaculis luctus, purus nibh sagittis erat, ornare scelerisque nunc lorem eu mauris. Aenean elementum enim eget dolor blandit, ac laoreet dolor convallis. Duis et ante ut urna vehicula sodales id ac purus. Proin lacinia convallis porttitor. Quisque sit amet enim aliquam, consequat urna id, elementum magna. Suspendisse augue enim, imperdiet elementum bibendum a, posuere a elit.
+\subsection{Test di Reverse Engineering}
+Il progetto riguardante la ricerca di dipendenze funzionali rilassate non possedeva una documentazione esaustiva. Per tale motivo si è deciso di creare delle classi Test, che avessero il compito di mostrare il processo effettuato da ogni modulo.
+Le classe di test create sono:
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item diff{\_}test.py : utilizzata per comprendere il funzionamento della classe che genera la matrice delle differenze.
+    \item relaxer{\_}test.py: utilizzata per testare la classe QueryRelaxer.
+    \item rfd{\_}extractor{\_}test.py utilizzata per testare il modulo che funge da Bridge per l'algoritmo di ricerca di RFD.
+\end{itemize}
 
-Aliquam eu diam dignissim eros sagittis ultrices. Sed eu laoreet lacus. Duis odio turpis, iaculis et nisl eu, tempor interdum eros. Vivamus cursus condimentum quam sit amet tristique. Nulla facilisi. Curabitur nibh sem, suscipit et pretium vitae, efficitur at sem. Praesent nunc est, malesuada a rhoncus vel, tincidunt a ligula. Cras ullamcorper lectus vel blandit lobortis. Nullam quis ipsum luctus, porta dui ut, ornare arcu.
+\subsection{Test di integrità}
+Durante lo sviluppo sono state create delle classi per il testing. Seppur non paragonabili a dei test di unità sono state utili per controllare il funzionamento di ogni singolo modulo.
+\begin{itemize}[noitemsep]
+\let\labelitemi\labelitemii
+    \item io{\_}test.py: utilizzata per testare la classe RFDInputOutput().
+    \item csv{\_}parser{\_}test.py : utilizzata per controllare il corretto funzionamento della classe CSVParser. 
+    \item csv{\_}test.py: utilizzata per controllare la corretta estrazione dell'header.
+    \item dataframe{\_}row{\_}slicer{\_}test.py : utilizzata per controllare il corretto funzionamento della classe Slicer.
+    \item similar{\_}strings{\_}test.py utilizzata per testare la funzionalità di ricerca di stringhe simili.
+\end{itemize}
+\subsection{Test di prestazione}
+Per misurare le prestazioni non è stato creato un modulo ad hoc, bensì sono stati eseguiti due gruppi di test manuali:
+Il primo gruppo di test è servito a testare la bontà dell'ordinamento delle RFD. 
+Un buon ordinamento di RFD deve porre prima le RFD che ampliano il Result Set di poco,
+in modo tale da evitare di produrre un Result Set che contengano dati poco inerenti all'interrogazione iniziale.
+Per effettuare questo controllo sono stati dichiarate tre variabili:
+\begin{itemize}
+    \item original{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito inizialmente.
+    \item relaxed{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
+    \item dataset{\_}size : una variabile che contiene la cardinalità del Dataset
+\end{itemize}
 
-Aliquam ante odio, egestas id elit eu, condimentum faucibus metus. Morbi sollicitudin eu diam non vestibulum. Nullam vel massa odio. Maecenas ornare, neque eget auctor finibus, nulla nunc vehicula enim, et posuere purus metus quis libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi tempus sit amet nibh eu luctus. In ipsum ipsum, pellentesque nec suscipit ut, vehicula euismod magna. Donec cursus ipsum id urna vulputate faucibus. Maecenas sollicitudin ante a lacinia facilisis. Fusce tincidunt neque non est suscipit, vel consequat magna varius. Sed pharetra, eros a luctus finibus, nunc urna bibendum libero, non malesuada massa urna eu tortor.
+
+
+Si è deciso di applicare un ottimizzazione sulla ricerca dell'RFD migliore. 
+Ogni volta che viene effettuata una Query Rilassata, prima restituire il Result Set, vengono testate le prime N RFD.
+Grazie a questi variabili è possibile controllare quanto aumenta la cardinalità del Result Set per ogni RFD. Viene quindi restituita l'RFD che produce il Result Set meno ampio possibile che sia però maggiore del Result Set restituito dalla query iniziale. In questo modo si cercano di ottenere i risultati che siano maggiormente correlati con l'interrogazione iniziale.
+
+Il secondo gruppo di test è stato eseguito verificare quanto tempo chiedesse l'algoritmo.
+Si deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quanto non dipendendo direttamente dal lavoro sviluppato.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Prestazioni.PNG}
+    \caption{Prestazioni}
+    \label{fig:prestazioni}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{confronto_curve.PNG}
+    \caption{Confronto tra curve}
+    \label{fig:confronto_curve}
+\end{figure}
+
+\section{Riflessioni}
+Dopo aver completato la descrizione del progetto sviluppato è necessario fare qualche osservazione.
+L'idea iniziale non è era quella di sviluppare un modulo professionale che permetta il rilassamento di query, bensì lo scopo principale è stato quello di dimostrare che è possibile creare un sistema di rilassamento basato sulle RFD.
+
+Il sistema , seppur necessitando di diverse migliorie, è stato sviluppato in modo da essere facilmente manutenibile. 
+Si può collegare facilmente il modulo ad un sistema di ricerca su Web, l'unica limitazione è data dalla poca scelta di comandi SQL, che sono però facilmente modificabili.
+Il progetto ha richiesto circa 2 mesi sviluppo per essere completato. Si è svolto sotto la supervisione del prof. Vincenzo Deufemia e della dott.ssa Loredana Caruccio. Il si è svolto con il collega Maurizio Casciano.
+
+\section{Lavori futuri}
+Seguono ora alcuni idee da implementare in futuro.
+\paragraph{Preferenze utente}
+Qualsiasi ordinamento di RFD che non tiene conto del grado di importanza degli attributi per l'utente, difficilmente produrrà un sistema che sia in grado di dare il risultato cercato.
+Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{Un in Universo in cui ciò sia fattibile} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
+Il problema sta nell'andare a capire su cosa l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro "prezzo"}.
+Si suggerisci quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
+\paragraph{Sistema di query Simil-SQL}
+Le attuali opzioni di query sono abbastanza scarne, è consigliabile implementare ulteriori opzioni, prendendo d'esempio quelle del SQL. In particolare servirebbero le opzioni: groupby,orderby,in,join.
+Tranne la "join" che richiede una revisione della struttura del progetto, il resto è facilmente implementabile.
+\paragraph{Parallelizzazione}
+Tutto il progetto è stato sviluppato senza parallelizzazione. Sia l'ordinamento che la scelta della query rilassata è facilmente parallelizzabile. Ciò può portare ad un aumento delle prestazioni, di conseguenza diventa più semplice effettuare maggiori test sulle RFD, permettendo cosi di ottenere Result Set che siano di maggior interesse per l'utente.
