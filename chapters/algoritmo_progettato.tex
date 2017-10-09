@@ -128,7 +128,7 @@ Per ogni Set vengono rilassati i valori in base alle soglie contenute nella RFD,
 Riprendendo l'esempio riportato nel paragrafo precedente, vengono raccolti i dati sui valori presenti in RHS, in questo caso vi è solo l'attributo shoe{\_}size \footnote{In realtà in RHS vi è sempre un unico attributo, la query viene rilassata con più attributi in quanto si esegue un perfezionamento come specificato nella nota precedente.} che viene rilassato di una soglia pari a 0. Dato che la query estesa $Q_2$ ha restituito una sola tupla, verrà rilassato un unico valore. La query rilassata $Q_3$  è : \newline 
 \centerline{SELECT * FROM dataset{\_}string WHERE shoe{\_}size=38}
 \newline
-Per la proprietà delle RFD (vedi Appendice Proprietà RFD) il Result Set restituito sarà $\geq$ del Result Set restituito dalla query estesa $Q_2$.
+Per la proprietà delle RFD il Result Set restituito sarà $\geq$ del Result Set restituito dalla query estesa $Q_2$.
 
 In questo caso il Result Set è uguale a :
 \begin{table}[H]
