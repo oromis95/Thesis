@@ -32,7 +32,7 @@ Sono state già calcolate le seguenti liste di RFD:
     \item cars{\_}rfds.csv
     \item cora{\_}rfds.csv
     \item dataset{\_}rdfs.csv
-    \item dataset{\_}strng{\_}rdfs.csv
+    \item dataset{\_}strng{\_}rfds.csv
 \end{itemize}
 
 
@@ -40,7 +40,7 @@ La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcun
 
 \subsection{Package io}
 In questo package sono contenuti diversi moduli divisi in baso al loro scopo. Vi sono due sottocartelle che raggruppano il tutto.
-Il contenuto nella sottocartela csv comprende:
+Il contenuto nella sotto-cartella csv comprende:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item csv{\_}parser.py
@@ -48,7 +48,7 @@ Il contenuto nella sottocartela csv comprende:
 \end{itemize}
 
 \paragraph{csv{\_}parser.py}
-Questo modulo contiene la classe CSV Parser che si occupa di prendere i dati dai file CSV e salvarli in un dataframe, il tutto viene fatto nel metodo init.
+Questo modulo contiene la classe CSV Parser che si occupa di prendere i dati dai file CSV e salvarli in un Dataframe, il tutto viene fatto nel metodo init(\ldots).
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
 class CSVParser:
@@ -63,7 +63,7 @@ class CSVParser:
 \caption{Class CSVParser}
 \label{Code:1}
 \end{listing}
-L'operazione vera e propria di $parsing$ e $loading$ dei dati viene delegata al Framework Pandas, richiamando il metodo alla riga 5
+L'operazione vera e propria di $parsing$ e $loading$ dei dati viene delegata al Framework Pandas, richiamando il metodo alla riga 5.
 Le variabili di questa classe sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
@@ -98,11 +98,11 @@ Questo modulo contiene la classe CSVInputOutput la quale si occupa di importare/
 \end{listing}
 Le variabili di questa classe sono:
 \begin{itemize}[noitemsep]
-    \item sep:[str] campo contenente il simbolo di separazione utilizzato nei file CSV
-    \item na{\_}rep:[str] campo contenente il simbolo che rappresenta un dato mancante 
-    \item index:[boolean] flag che indica se si vuole stampare nel file csv gli indici di riga
-    \item encoding:[str] campo contente la codifica dei file input/output
-    \item date{\_}format:[str] campo contente il formato delle date
+    \item sep:[str] campo contenente il simbolo di separazione utilizzato nei file CSV.
+    \item na{\_}rep:[str] campo contenente il simbolo che rappresenta un dato mancante. 
+    \item index:[boolean] flag che indica se si vuole stampare nel file csv gli indici di riga.
+    \item encoding:[str] campo contente la codifica dei file input/output.
+    \item date{\_}format:[str] campo contente il formato delle date.
 \end{itemize}
 Questa classe possiede due metodi.
 Il primo è il metodo store
@@ -113,9 +113,9 @@ Il primo è il metodo store
 \caption{store method}
 \label{Code:4}
 \end{listing}
-Questo metodo prende in input il path del del file in cui andare a salvare il DataFrame
+Questo metodo prende in input il path del del file in cui andare a salvare il DataFrame.
 
-Il secondo è il metodo load
+Il secondo è il metodo load:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
     def load(self, path: str) -> pd.DataFrame:
@@ -123,10 +123,10 @@ Il secondo è il metodo load
 \caption{load method}
 \label{Code:5}
 \end{listing}
-Il metodo prende in input il path del file e delegando a Pandas Dataframe esegue il parsing e il loading
+Il metodo prende in input il path del file e delegando a Pandas Dataframe esegue il parsing e il loading.
 
 
-La seconda sottocartella rfd contiene vari moduli inerenti alla manipolazione delle RFD:
+La seconda sotto-cartella rfd contiene vari moduli inerenti alla manipolazione delle RFD:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item rfd{\_}extractor.py
@@ -134,8 +134,7 @@ La seconda sottocartella rfd contiene vari moduli inerenti alla manipolazione de
 \end{itemize}
 
 \paragraph{rfd{\_}extractor.py}
-È contiene la classe RFDExtractor che si occupa di estrarre le RFD da un dataset
-rfd{\_}extractor.py
+Contiene la classe RFDExtractor che si occupa di estrarre le RFD da un dataset.
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
 class RFDExtractor:
@@ -241,7 +240,7 @@ Il metodo drop{\_}query{\_}rhs(...) si occupa di eliminare tutte le RFD che poss
 
 Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di NaN presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
 
-Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}
+Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}.
 
 il metodo rfd{\_}to{\_}string(...) svolge un ruolo alquanto semplice, si occupa di convertire il formato delle RFD in un formato stringa facilmente leggibile.
 
@@ -252,7 +251,7 @@ Nella riga 9 viene implementato la funzionalità di selezione di valori apparten
 \centerline{SELECT * FROM dataset{\_}string WHERE height BETWEEN $value_1$ and $value_2$}
 \\~\\
 Nella riga 12 viene implementata la funzionalità di uguaglianza per int e float.
-Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn"
+Nelle righe dal 13 a 22, viene implementata la funzione di uguaglianza con le stringhe, inoltre è stata implementata anche la funzionalità simil-SQL "LIKE". L'utente può quindi effettuare delle query non solo di uguaglianza, ma anche di contenimento. Ad esempio può chiedere tutte le stringhe che iniziamo per "mary" o che contengono la parola "ohn".
 
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
@@ -287,11 +286,10 @@ def to_expression(self) -> str:
 \end{listing}
 
 Il metodo extend{\_}query{\_}ranges(...) prende in input una query ed una RFD ed estende i range sugli attributi basandosi sulle soglie contenute nella RDF. Nel caso in qualche attributo della query è di tipo stringa vengono calcolate le stringhe simili e vengono utilizzare nella query estesa.
-(vedi lavori futuri)
 
-Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe ed una soglia e si occupa di trovare nel database tutte le stringhe che differiscono di una soglia $\epsilon$. Restituisce un altro pandas.Dataframe 
+Il metodo similar{\_}string() prende in input una stringa, una pandas.Dataframe ed una soglia e si occupa di trovare nel database tutte le stringhe che differiscono di una soglia $\epsilon$. Restituisce un altro pandas.Dataframe.
 
-Il metodo extraxt{\_}value{\_}list(...) prende in input un pandas.Dataframe ed una lista contenente le colonne di cui si vogliono estrarre i valori. Questo metodo restituisce un dizionario di liste, ognuna delle quali ha come chiave il nome dell'attributo
+Il metodo extraxt{\_}value{\_}list(...) prende in input un pandas.Dataframe ed una lista contenente le colonne di cui si vogliono estrarre i valori. Questo metodo restituisce un dizionario di liste, ognuna delle quali ha come chiave il nome dell'attributo.
 
 \paragraph{slicer.py}
 È una classe ausiliaria che contiene un solo metodo.
@@ -319,7 +317,7 @@ python main .py -p <path-of-dataset > -q <query> [ options ]
 
 dove:
 \begin{itemize}
-\item path-of-dataset è il path relativo Dataset da utilizzare per le query;
+\item path-of-dataset è il path relativo Dataset da utilizzare per le query.
 \item query è il parametro contenente la query, essa può avere la seguente struttura\footnote{I valori nel caso siano in formato stringa vanno racchiusi fra apici singoli. Ciò viene fatto per evitare problemi nella lettura di eventuali spazi bianchi.}:
 \begin{itemize}
 \item query semplice : \mint{json}|"{'nome_attributo',valore_attributo}"|
@@ -337,15 +335,15 @@ e [options] può contenere zero o più delle seguenti opzioni:
 
 
 \paragraph{Metodo main()}
-Il metodo main() è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process()
+Il metodo main() è il primo metodo ad essere eseguito di occupa di leggere e controllare alcuni parametri passati da linea di comando. Una volta processati esso richiama il metodo start{\_}process().
 
 \paragraph{Metodo start{\_}process()}
 Questo metodo rappresenta il core del software, incapsula tutti i processi di Query Relaxation.
 Segue ora una lista dei metodi che vengono richiamati:
 \begin{enumerate}
     \item Inizialmente si occupa di leggere il DataSet richiamando i metodi della classe CSVInputOutput.
-    \item Viene effettuato il caricamento della lista di RFD, se tale file non esiste viene generato
-    \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodiché viene ordinato
+    \item Viene effettuato il caricamento della lista di RFD, se tale file non esiste viene generato,
+    \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodiché viene ordinato.
     \item Per ogni RFD i contenuta nella lista \footnote{Vi è un parametro per specificare il numero massimo di RFD da testare} si itera nel seguente modo :
     \begin{itemize}
         \item Si effettua una query estesa rispetto alle soglie della RFD i-esima.

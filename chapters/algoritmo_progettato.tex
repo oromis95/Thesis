@@ -1,6 +1,6 @@
 In questa sezione saranno illustrati sequenzialmente i passi effettuati dal software. I passi sono  seguenti:
 \begin{itemize}[noitemsep]
-    \item Caricamento dataset
+    \item Caricamento Dataset
     \item Caricamento lista RFD
     \item Ordinamento delle RFD
     \item Query Estesa
@@ -12,10 +12,10 @@ In questa sezione saranno illustrati sequenzialmente i passi effettuati dal soft
 \caption{Flowchart}\label{fig:4}
 \end{figure}
 \paragraph{Caricamento Dataset}
-Il primo passo da effettuare è quello di caricare il DataSet in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il DataSet può contenere vari tipi di dati: float, int, stringhe e date.
-La struttura dati utilizzata per contenere i dati è quella del pandas.Dataframe , contenuta nel package Pandas\footnote{Pandas è una libreria software scritta per il linguaggio di programmazione Python .È adibita alla manipolazione e l'analisi dei dati. In particolare, offre strutture e operazioni di dati per la manipolazione di tabelle numeriche e di serie temporali. }. \\Il Dataframe di Pandas è una struttura dati tabulare bidimensionale variabile in formato e con assi etichettati (righe e colonne). Le operazioni vengono effettuate sulle righe e sulle colonne. 
-\paragraph{Carimento lista RFD}
-Il secondo passo consiste nel caricare la lista di RFD. L'utente può passare il path del file contenente le RFD, altrimenti viene invocato un algoritmo di ricerca di RFD sul DataSet indicato.
+Il primo passo da effettuare è quello di caricare il Dataset in formato csv. Il separatore che di norma può essere costituito da un carattere a scelta è stato impostato come carattere ";".\\ Il DataSet può contenere vari tipi di dati: float, int, string e date.
+La struttura dati utilizzata per contenere i dati è quella del pandas.Dataframe , contenuta nel package Pandas\footnote{Pandas è una libreria software scritta per il linguaggio di programmazione Python .È adibita alla manipolazione e l'analisi dei dati. In particolare, offre strutture e operazioni di dati per la manipolazione di tabelle numeriche e di serie temporali. }. \\Il Dataframe di Pandas è una struttura dati tabulare bidimensionale con assi etichettati (righe e colonne). Le operazioni vengono effettuate sulle righe e sulle colonne. 
+\paragraph{Caricamento lista RFD}
+Il secondo passo consiste nel caricare la lista di RFD. L'utente può passare il path del file contenente le RFD, altrimenti viene invocato un algoritmo di ricerca di RFD sul Dataset indicato.
 Nel caso in cui venga passato il path, il formato del file deve essere di tipo csv, con carattere di separazione uguale a ";"\footnote{In realtà è stato implementato un sistema capace di riconoscere ed utilizzare un qualsiasi carattere di separazione}.
 Dato che ogni RFD può avere un attributo diverso come parte RHS , si è scelto di utilizzare una particolare notazione:
 \begin{table}[H]
@@ -31,24 +31,13 @@ Dato che ogni RFD può avere un attributo diverso come parte RHS , si è scelto 
     \label{tab:RFD_notation}
 \end{table}
 
-La prima colonna del Dataframe contiene non una soglia bensì il nome dell'attributo che funge da RHS in quella RFD.
+La prima colonna del Dataframe non contiene una soglia bensì il nome dell'attributo che funge da RHS in quella RFD.
 \\
-Se l'utente non fornisce il path del file, o se il file non viene trovato, il software richiama l'algoritmo di ricerca delle RFD. Il path del Dataset viene passato all'algoritmo di RFDD\footnote{Relaxed Functional Dependencies Discovery} , dopo aver elaborato restituisce una Dataframe contenente le RFD, le quali vengono salvate su file e successivamente caricate in memoria.
+Se l'utente non fornisce il path del file, o se il file non viene trovato, il software richiama l'algoritmo di ricerca delle RFD. Il path del Dataset viene passato all'algoritmo di RFDD\footnote{Relaxed Functional Dependencies Discovery} , dopo aver elaborato restituisce un Dataframe contenente le RFD, le quali vengono salvate su file e successivamente caricate in memoria.
 \paragraph{Ordinamento delle RFD}
 Una volta caricata la lista di query è necessario effettuare una pulizia sui dati.
 Vengono eliminate le RFD che possiedono valore "NaN" su attributi che sono presenti nella query, dopodiché vengono eliminate le RFD dove nel lato RHS è presente un attributo della query \footnote{Utilizzare una RFD di questo tipo significherebbe utilizzare una dipendenza funzionale rilassata banale, la quale non porta alcuna informazione aggiuntiva}
-\begin{table}[H]
-    \centering
-    \begin{tabular}{l l l l l }
-     RHS & $attr_1$ & $attr_2$ & $attr_{\ldots}$ & $attr_n$ \\
-    $attr_{k}$ & $s_{12}$ & $s_{13}$ & $s_{\ldots}$ & $s_1n$  \\
-    $attr_{j}$ & $s_{22}$ & $s_{23}$  & $s_{\ldots}$ & $s_{2n}$\\
-    $attr_{p}$ & $s_{\ldots1}$ & $s_{\ldots3}$  & $s_{\ldots}$ & $attr_{r}$\\
-    $s_{m1}$ & $s_{m2}$ & $s_{m3}$ & $s_{\ldots}$ & $s_{mn}$\\
-    \end{tabular}
-    \caption{Pandas Dataframe contenente le soglie delle RFD}
-    \label{tab:RFD_notation}
-\end{table}
+
 Dopo aver effettuato questa pulizia le RFD vengono ordinate. 
 \newline
 C'è stata molta indecisione riguardo l'implementazione dell'ordinamento, in quanto non è stata trovata una dimostrazione formale che ci indicasse quale metodo fosse il più efficace.
@@ -119,7 +108,7 @@ Dato che $height$ è un attributo di tipo numerico, si vanno a prendere tutti i 
 \\~\\
 \centerline{SELECT * FROM dataset{\_}string WHERE height =169} 
 \\~\\
-Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dall query iniziale.
+Effettuando una nuova interrogazione con la query $Q_2$ otteniamo un Result Set che sarà di sicuro $\geq$ del Result Set restituito dalla query iniziale.
 In questo caso entrambe le query restituiscono questo risultato: \newline 
 \begin{table}[H]
     \centering
@@ -132,11 +121,11 @@ In questo caso entrambe le query restituiscono questo risultato: \newline
     \label{tab:sta_ext_result_set}
 \end{table}
 \paragraph{Query Rilassata}
-In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata (vedi Appendice [perfezionamento con lhs]).
-Inizialmente si effettua una raccolta dei valori nel dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati\footnote{In questo momento lo definiamo come un set} per ogni tupla restituita dal dataset (vedi Appendice [perfezionamento combinazioni]). 
+In questa procedura viene effettuato il vero e proprio rilassamento, scambiando gli attributi della query con attributi definiti dalla parte RHS della RFD selezionata \footnote{Rilassando la query in questo modo è probabile che il Result Set abbia cardinalità molto alta, per diminuire il numero di tuple restituite dalla query è necessario modificarla includendo dei vincoli sugli attributi che sono nel lato LHS ma che non fanno parte della query iniziale, in questo modo si riesce ad ottenere un Result Set di cardinalità $\leq$ del Result che restituirebbe un query rilassata solo su RHS.}
+Inizialmente si effettua una raccolta dei valori nel Dataset, si selezionano solo gli attributi che sono presenti in RHS. Viene mantenuta una struttura dati\footnote{In questo momento lo definiamo come un set} per ogni tupla restituita contenuta nel Dataset. 
 Per ogni Set vengono rilassati i valori in base alle soglie contenute nella RFD, il risultato sarà una serie di SET che contengono dei range più ampi.
 È quindi possibile effettuare $k$ query rilassate, ottenendo vari Result Set. La loro unione andrà a costituire il Result Set finale che sarà restituito in output.
-Riprendendo l'esempio riportato nel paragrafo precedente, vengono raccolti i dati sui valori presenti in RHS, in questo caso vi è solo l'attributo shoe{\_}sie \footnote{In realtà in RHS vi è sempre un unico attributo, la query viene rilassata con più attributi in quanto si esegue un perfezionamento vedi  Appendice [perfezionamento combinazioni]} che viene rilassato di una soglia pari a 0. Dato che la query estesa $Q_2$ ha restituito una sola tupla, verrà rilassato un unico valore. La query rilassata $Q_3$  è : \newline 
+Riprendendo l'esempio riportato nel paragrafo precedente, vengono raccolti i dati sui valori presenti in RHS, in questo caso vi è solo l'attributo shoe{\_}size \footnote{In realtà in RHS vi è sempre un unico attributo, la query viene rilassata con più attributi in quanto si esegue un perfezionamento come specificato nella nota precedente} che viene rilassato di una soglia pari a 0. Dato che la query estesa $Q_2$ ha restituito una sola tupla, verrà rilassato un unico valore. La query rilassata $Q_3$  è : \newline 
 \centerline{SELECT * FROM dataset{\_}string WHERE shoe{\_}size=38}
 \newline
 Per la proprietà delle RFD (vedi Appendice Proprietà RFD) il Result Set restituito sarà $\geq$ del Result Set restituito dalla query estesa $Q_2$.
@@ -155,6 +144,6 @@ In questo caso il Result Set è uguale a :
     \label{tab:relax_result_set}
 \end{table}
 
-Dato che questa procedura viene effettuata per un numero N di RFD, viene effettuato un confronto in modo tale da restituire il Result Set che che sia il meno ampio possibile \footnote{Vengono scartati i Result Set che hanno cardinalità uguale ad Result restituito dalla query iniziale}.
+Dato che questa procedura viene effettuata per un numero $N$ di RFD, viene effettuato un confronto in modo tale da restituire il Result Set che che sia il meno ampio possibile \footnote{Vengono scartati i Result Set che hanno cardinalità uguale ad Result Set restituito dalla query iniziale}.
 
 

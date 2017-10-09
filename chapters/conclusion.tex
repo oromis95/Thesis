@@ -36,7 +36,7 @@ Un buon ordinamento di RFD deve porre prima le RFD che ampliano il Result Set di
 in modo tale da evitare di produrre un Result Set che contengano dati poco inerenti all'interrogazione iniziale.
 Per effettuare questo controllo sono stati dichiarate tre variabili:
 \begin{itemize}
-    \item original{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito inzialmente.
+    \item original{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito inizialmente.
     \item relaxed{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
     \item dataset{\_}size : una variabile che contiene la cardinalità del Dataset
 \end{itemize}
@@ -50,11 +50,18 @@ Grazie a questi variabili è possibile controllare quanto aumenta la cardinalit�
 Il secondo gruppo di test è stato eseguito verificare quanto tempo chiedesse l'algoritmo.
 Si deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quanto non dipendendo direttamente dal lavoro sviluppato.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics{Prestazioni.PNG}
     \caption{Prestazioni}
     \label{fig:prestazioni}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{confronto_curve.PNG}
+    \caption{Confronto tra curve}
+    \label{fig:confronto_curve}
 \end{figure}
 
 \section{Riflessioni}
@@ -69,11 +76,11 @@ Il progetto ha richiesto circa 2 mesi sviluppo per essere completato. Si è svol
 Seguono ora alcuni idee da implementare in futuro.
 \paragraph{Preferenze utente}
 Qualsiasi ordinamento di RFD che non tiene conto del grado di importanza degli attributi per l'utente, difficilmente produrrà un sistema che sia in grado di dare il risultato cercato.
-Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{Un in Universo in cui ciò sia fattabile} analizzandole tutte, non è detto che l'RFD scelta restituira il risultato cercato dall'utente. Perchè cio?
+Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{Un in Universo in cui ciò sia fattibile} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
 Il problema sta nell'andare a capire su cosa l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro "prezzo"}.
 Si suggerisci quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
-\paragraph{Sistema di query SimilSQL}
+\paragraph{Sistema di query Simil-SQL}
 Le attuali opzioni di query sono abbastanza scarne, è consigliabile implementare ulteriori opzioni, prendendo d'esempio quelle del SQL. In particolare servirebbero le opzioni: groupby,orderby,in,join.
-Tranne la "join" che richiede una revisione della struttura del progetto, il resto è facilmenete implementabile.
+Tranne la "join" che richiede una revisione della struttura del progetto, il resto è facilmente implementabile.
 \paragraph{Parallelizzazione}
 Tutto il progetto è stato sviluppato senza parallelizzazione. Sia l'ordinamento che la scelta della query rilassata è facilmente parallelizzabile. Ciò può portare ad un aumento delle prestazioni, di conseguenza diventa più semplice effettuare maggiori test sulle RFD, permettendo cosi di ottenere Result Set che siano di maggior interesse per l'utente.
