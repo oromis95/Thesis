@@ -1,5 +1,5 @@
 \section{Struttura del Progetto}
-Il progetto è incluso in una cartella contenente anche il software di ricerca di RFD, tutto il codice sviluppato è contenuto nella sottocartella query{\_}rewriter
+Il progetto è incluso in una cartella contenente anche il software di ricerca di RFD, tutto il codice sviluppato è contenuto nella sottocartella query{\_}rewriter.
 \begin{figure}[H]
     \centering
     \includegraphics{struct_project.png}
@@ -8,8 +8,7 @@ Il progetto è incluso in una cartella contenente anche il software di ricerca d
 \end{figure}
 
 \subsection{Package Dataset}
-Il package Dataset include una serie di Dataset in formato $csv$ ed una cartella contente le rispettive liste di RFD già precalcolate. 
-I Dataset inclusi nel progetto sono:
+Il package Dataset include una serie di Dataset in formato $csv$ ed una cartella contente le rispettive liste di RFD già precalcolate. I Dataset inclusi nel progetto sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item cars.csv
@@ -36,7 +35,7 @@ Sono state già calcolate le seguenti liste di RFD:
 \end{itemize}
 
 
-La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa
+La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa.
 
 \subsection{Package io}
 In questo package sono contenuti diversi moduli divisi in baso al loro scopo. Vi sono due sottocartelle che raggruppano il tutto.
@@ -88,7 +87,7 @@ All'interno del costruttore è presente una chiamata al metodo {\_\_}guess{\_}de
 Questo metodo ha il compito di indovinare il carattere di separazione leggendo il file.
 
 \paragraph{io.py}
-Questo modulo contiene la classe CSVInputOutput la quale si occupa di importare/esportare una Pandas.Dataframe da/in un file CSV
+Questo modulo contiene la classe CSVInputOutput la quale si occupa di importare/esportare una Pandas.Dataframe da/in un file CSV.
 \begin{listing}[H]
 \begin{minted}[,frame=lines,linenos]{python}
     class CSVInputOutput:
@@ -105,7 +104,7 @@ Le variabili di questa classe sono:
     \item date{\_}format:[str] campo contente il formato delle date.
 \end{itemize}
 Questa classe possiede due metodi.
-Il primo è il metodo store
+Il primo è il metodo store:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
     def store(self, df: pd.DataFrame, path: str):
@@ -162,7 +161,7 @@ class RFDExtractor:
 \label{Code:6}
 \end{listing}
 
-Non saranno fornite particolari informazioni su questa classe , in quanto essa fa parte del progetto riguardante la ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}
+Non saranno fornite particolari informazioni su questa classe , in quanto essa fa parte del progetto riguardante la ricerca di RFD , per ulteriori informazioni si veda \cite{tesinaIA}.
 
 \paragraph{store{\_}and{\_}load.py}
 È un modulo che ha funzione di wrapping per l'algoritmo di ricerca di RFD.
@@ -179,7 +178,7 @@ def search_rfds(csvPath,name_rfds_file):
 
 IL primo metodo "diff" prende in input due liste, e restituisce una lista di elementi che sono presenti nella prima ma non nella seconda.
 
-Il secondo metodo richiama l'algoritmo di Ricerca delle RFD \footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati} e crea un file contente una lista di RFD. Prende in input il path del file contenente il Dataset, e una stringa che contiene il nome del file che incapsula le RFD. 
+Il secondo metodo richiama l'algoritmo di Ricerca delle RFD\footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati.} e crea un file contente una lista di RFD. Prende in input il path del file contenente il Dataset, e una stringa che contiene il nome del file che incapsula le RFD. 
 
 \subsection{Package query}
 Nel package query vi sono tre moduli, tutte e tre si occupano di svolgere operazioni riguardanti le interrogazioni al dataset.
@@ -240,7 +239,7 @@ Il metodo drop{\_}query{\_}rhs(...) si occupa di eliminare tutte le RFD che poss
 
 Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di NaN presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
 
-Il metodo sort{\_}by{\_}increasing{\_}threshold(...) , contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS}.
+Il metodo sort{\_}by{\_}increasing{\_}threshold(...), contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS.}.
 
 il metodo rfd{\_}to{\_}string(...) svolge un ruolo alquanto semplice, si occupa di convertire il formato delle RFD in un formato stringa facilmente leggibile.
 
@@ -299,7 +298,7 @@ class Slicer:
     @staticmethod
     def slice(df: pd.DataFrame) -> list:
 \end{minted}
-\caption{Metodo def{\_}to{\_}express()}
+\caption{Metodo slice()}
 \label{Code:14}
 \end{listing}
 
@@ -342,12 +341,12 @@ Questo metodo rappresenta il core del software, incapsula tutti i processi di Qu
 Segue ora una lista dei metodi che vengono richiamati:
 \begin{enumerate}
     \item Inizialmente si occupa di leggere il DataSet richiamando i metodi della classe CSVInputOutput.
-    \item Viene effettuato il caricamento della lista di RFD, se tale file non esiste viene generato,
+    \item Viene effettuato il caricamento della lista di RFD, se tale file non esiste viene generato.
     \item Viene effettuato un cleaning del DataFrame contenente le RFD, dopodiché viene ordinato.
-    \item Per ogni RFD i contenuta nella lista \footnote{Vi è un parametro per specificare il numero massimo di RFD da testare} si itera nel seguente modo :
+    \item Per ogni RFD i contenuta nella lista \footnote{Vi è un parametro per specificare il numero massimo di RFD da testare.} si itera nel seguente modo:
     \begin{itemize}
         \item Si effettua una query estesa rispetto alle soglie della RFD i-esima.
-        \item Vengono caricati ,dal Result Set ,tutti i valori degli attributi che sono nella parte RHS della query, inoltre vengono caricati anche i valori degli attributi LHS che non sono nella query. Viene mantenuto un DataFrame per ogni tupla risultante nel Result Set.
+        \item Vengono caricati, dal Result Set, tutti i valori degli attributi che sono nella parte RHS della query, inoltre vengono caricati anche i valori degli attributi LHS che non sono nella query. Viene mantenuto un DataFrame per ogni tupla risultante nel Result Set.
         \item Tutti i valori nei DataFrame generati precedentemente vengono estesi rispetto alla soglie della RFD i-esima.
         \item Viene effettuata una query unendo (con degli or) tutte le condizioni contenute nel DataFrame.
         \item Il Result Set contenuto dalla query rilassata viene salvato in memoria.
@@ -358,8 +357,8 @@ Segue ora una lista dei metodi che vengono richiamati:
 
 \section{Installazione}
 \paragraph{Requisiti}
-La versione di Python utilizzata è la 3.6.2 , è stata utilizzati su di un architettura a x64.
-Dato che buona parte del codice richiama metodi scritti in Cython , serve un compilatore C++. È stato utilizzato un compilatore della Microsoft incluso nel pacchetto Visual Studio Community 2017 \\
+La versione di Python utilizzata è la 3.6.2, è stata utilizzati su di un architettura a x64.
+Dato che buona parte del codice richiama metodi scritti in Cython, serve un compilatore C++. È stato utilizzato un compilatore della Microsoft incluso nel pacchetto Visual Studio Community 2017 \\
 Il progetto contiene le seguenti dipendenze:
 \begin{itemize}[noitemsep]
 \item[-] click $\geq$ 6.7
@@ -388,16 +387,16 @@ Il progetto contiene le seguenti dipendenze:
 
 \begin{enumerate}
 \item Scaricare Python (link: https://www.python.org/downloads/release/python-362/), fare attenzione a scegliere la versione in base all'architettura della macchina su cui verrà eseguito il software.
-\item Scaricare ed installare il pacchetto "Sviluppo applicazioni desktop con C++" ottenibile da Visual Studio Community 2017 (link: https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community\&rel=15)
+\item Scaricare ed installare il pacchetto "Sviluppo applicazioni desktop con C++" ottenibile da Visual Studio Community 2017 (link: https://www.visualstudio.com/it/thank-you-downloading-visual-studio/?sku=Community\&rel=15).
 \item Aggiugere alla variabile di ambiente PATH i seguenti valori:\\ "D:\textbackslash Programmi\textbackslash VS\textbackslash VC\textbackslash Tools\textbackslash MSVC\textbackslash 14.11.25503\textbackslash bin\textbackslash HostX64\textbackslash x64"\\
-"C:\textbackslash Program Files (x86)\textbackslash Windows Kits\textbackslash 10\textbackslash bin\textbackslash x64"\footnote{La posizione di tali cartelle può variare}
-\item Aprire il "Prompt dei comandi degli strumenti nativi x64(o x86 per sistemi a 32 bit) per VS 2017" ed eseguire il comando "python -m pip install -U pip setuptools"
-\item Scaricare il progetto (link: https://github.com/izio7/AttributedGraphProfiler)
+"C:\textbackslash Program Files (x86)\textbackslash Windows Kits\textbackslash 10\textbackslash bin\textbackslash x64"\footnote{La posizione di tali cartelle può variare.}.
+\item Aprire il "Prompt dei comandi degli strumenti nativi x64(o x86 per sistemi a 32 bit) per VS 2017" ed eseguire il comando "python -m pip install -U pip setuptools".
+\item Scaricare il progetto (link: https://github.com/izio7/AttributedGraphProfiler).
 \item Spostarsi all'interno della Root del progetto ed aprire il terminale.
-\item Eseguire il comando "virtualenv venv" per creare un Virtual Environment in cui eseguire il progetto
-\item Eseguire il comando "venv\textbackslash Scripts \textbackslash activate" con cui si si accede al Virtual Environment \footnote{Sotto ambiene Linux\textbackslash MacOS il comando da eseguire è "source venv/bin/activate"}
-\item Eseguire il comando "pip install -r requirements.txt" per installare le dipendenze richieste.\footnote{Se si esegue il software in un ambiente di sviluppo dedicato questa operazione viene effettuata automaticamente}
-\item Eseguire il comando "python setup.py install"
-\item Eseguire i comando "python build.py build{\_}ext --inplace" per effettuare generare il codice C tramite Cython
-\item Ora il software è pronto per eseguire le Query rilassate, il main si trova all'interno della folder "query{\_}rewriter"
+\item Eseguire il comando "virtualenv venv" per creare un Virtual Environment in cui eseguire il progetto.
+\item Eseguire il comando "venv\textbackslash Scripts \textbackslash activate" con cui si si accede al Virtual Environment \footnote{Sotto ambiene Linux\textbackslash MacOS il comando da eseguire è "source venv/bin/activate".}.
+\item Eseguire il comando "pip install -r requirements.txt" per installare le dipendenze richieste\footnote{Se si esegue il software in un ambiente di sviluppo dedicato questa operazione viene effettuata automaticamente.}.
+\item Eseguire il comando "python setup.py install".
+\item Eseguire i comando "python build.py build{\_}ext --inplace" per effettuare generare il codice C tramite Cython.
+\item Ora il software è pronto per eseguire le Query rilassate, il main si trova all'interno della folder "query{\_}rewriter".
 \end{enumerate}

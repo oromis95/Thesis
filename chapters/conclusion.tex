@@ -11,7 +11,7 @@ Si possono evidenziare tre gruppi:
 
 \subsection{Test di Reverse Engineering}
 Il progetto riguardante la ricerca di dipendenze funzionali rilassate non possedeva una documentazione esaustiva. Per tale motivo si è deciso di creare delle classi Test, che avessero il compito di mostrare il processo effettuato da ogni modulo.
-Le classe di test create sono:
+Le classi di test create sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item diff{\_}test.py : utilizzata per comprendere il funzionamento della classe che genera la matrice delle differenze.
@@ -24,10 +24,10 @@ Durante lo sviluppo sono state create delle classi per il testing. Seppur non pa
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item io{\_}test.py: utilizzata per testare la classe RFDInputOutput().
-    \item csv{\_}parser{\_}test.py : utilizzata per controllare il corretto funzionamento della classe CSVParser. 
+    \item csv{\_}parser{\_}test.py: utilizzata per controllare il corretto funzionamento della classe CSVParser. 
     \item csv{\_}test.py: utilizzata per controllare la corretta estrazione dell'header.
-    \item dataframe{\_}row{\_}slicer{\_}test.py : utilizzata per controllare il corretto funzionamento della classe Slicer.
-    \item similar{\_}strings{\_}test.py utilizzata per testare la funzionalità di ricerca di stringhe simili.
+    \item dataframe{\_}row{\_}slicer{\_}test.py: utilizzata per controllare il corretto funzionamento della classe Slicer.
+    \item similar{\_}strings{\_}test.py: utilizzata per testare la funzionalità di ricerca di stringhe simili.
 \end{itemize}
 \subsection{Test di prestazione}
 Per misurare le prestazioni non è stato creato un modulo ad hoc, bensì sono stati eseguiti due gruppi di test manuali:
@@ -36,19 +36,19 @@ Un buon ordinamento di RFD deve porre prima le RFD che ampliano il Result Set di
 in modo tale da evitare di produrre un Result Set che contengano dati poco inerenti all'interrogazione iniziale.
 Per effettuare questo controllo sono stati dichiarate tre variabili:
 \begin{itemize}
-    \item original{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito inizialmente.
-    \item relaxed{\_}query{\_}result{\_}set{\_}size : una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
-    \item dataset{\_}size : una variabile che contiene la cardinalità del Dataset
+    \item original{\_}query{\_}result{\_}set{\_}size: una variabile che contiene la cardinalità del Result Set restituito inizialmente.
+    \item relaxed{\_}query{\_}result{\_}set{\_}size: una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
+    \item dataset{\_}size: una variabile che contiene la cardinalità del Dataset.
 \end{itemize}
 
 
 
-Si è deciso di applicare un ottimizzazione sulla ricerca dell'RFD migliore. 
+Si è deciso di applicare un' ottimizzazione sulla ricerca dell'RFD migliore. 
 Ogni volta che viene effettuata una Query Rilassata, prima restituire il Result Set, vengono testate le prime N RFD.
 Grazie a questi variabili è possibile controllare quanto aumenta la cardinalità del Result Set per ogni RFD. Viene quindi restituita l'RFD che produce il Result Set meno ampio possibile che sia però maggiore del Result Set restituito dalla query iniziale. In questo modo si cercano di ottenere i risultati che siano maggiormente correlati con l'interrogazione iniziale.
 
 Il secondo gruppo di test è stato eseguito verificare quanto tempo chiedesse l'algoritmo.
-Si deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quanto non dipendendo direttamente dal lavoro sviluppato.
+Si è deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quanto non dipendono direttamente dal lavoro sviluppato.
 
 \begin{figure}[H]
     \centering
@@ -66,19 +66,19 @@ Si deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in quan
 
 \section{Riflessioni}
 Dopo aver completato la descrizione del progetto sviluppato è necessario fare qualche osservazione.
-L'idea iniziale non è era quella di sviluppare un modulo professionale che permetta il rilassamento di query, bensì lo scopo principale è stato quello di dimostrare che è possibile creare un sistema di rilassamento basato sulle RFD.
-
-Il sistema , seppur necessitando di diverse migliorie, è stato sviluppato in modo da essere facilmente manutenibile. 
+L'idea iniziale non è era quella di sviluppare un modulo professionale che permetta il rilassamento di query, ma lo scopo principale è stato quello di dimostrare che è possibile creare un sistema di rilassamento basato sulle RFD.
+%DA AMPLIARE
+Il sistema, seppur necessitante di diverse migliorie, è stato sviluppato in modo da essere facilmente manutenibile. 
 Si può collegare facilmente il modulo ad un sistema di ricerca su Web, l'unica limitazione è data dalla poca scelta di comandi SQL, che sono però facilmente modificabili.
-Il progetto ha richiesto circa 2 mesi sviluppo per essere completato. Si è svolto sotto la supervisione del prof. Vincenzo Deufemia e della dott.ssa Loredana Caruccio. Il si è svolto con il collega Maurizio Casciano.
+Il progetto ha richiesto circa due mesi di sviluppo per essere completato. Si è svolto sotto la supervisione del prof. Vincenzo Deufemia e della dott.ssa Loredana Caruccio. Il lavoro si è svolto con il collega Maurizio Casciano.
 
 \section{Lavori futuri}
 Seguono ora alcuni idee da implementare in futuro.
 \paragraph{Preferenze utente}
 Qualsiasi ordinamento di RFD che non tiene conto del grado di importanza degli attributi per l'utente, difficilmente produrrà un sistema che sia in grado di dare il risultato cercato.
-Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{Un in Universo in cui ciò sia fattibile} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
-Il problema sta nell'andare a capire su cosa l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro "prezzo"}.
-Si suggerisci quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
+Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{In un universo in cui ciò sia fattibile.} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
+La questione sta nell'andare a intendere su che punto l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro "prezzo".}.
+Si suggerisce quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
 \paragraph{Sistema di query Simil-SQL}
 Le attuali opzioni di query sono abbastanza scarne, è consigliabile implementare ulteriori opzioni, prendendo d'esempio quelle del SQL. In particolare servirebbero le opzioni: groupby,orderby,in,join.
 Tranne la "join" che richiede una revisione della struttura del progetto, il resto è facilmente implementabile.
