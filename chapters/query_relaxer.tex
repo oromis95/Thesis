@@ -1,5 +1,5 @@
 Oggigiorno dato l'ampio utilizzo del World Wide Web, soprattutto riguardo la ricerca e l'estrazione di informazioni, i sistemi di interrogazione hanno assunto un ruolo fondamentale.
-Normalmente una ricerca può avere due risultati: esito positivo se esiste un oggetto che corrisponde ai parametri cercati ed esito negativo se tale oggetto non esiste. Nell'ambito Web il concetto di ricerca viene modificato, e il risultato non è solo un "Si" o un "No", di conseguenza nei database che  sono molto ampi spesso si possono verificare due problemi principali:
+Normalmente una ricerca può avere due risultati: esito positivo se esiste un oggetto che corrisponde ai parametri cercati ed esito negativo se tale oggetto non esiste. Nell'ambito Web il concetto di ricerca viene modificato, e il risultato non è solo un \quotes{Si} o un \quotes{No}, di conseguenza nei database che  sono molto ampi spesso si possono verificare due problemi principali:
 \begin{enumerate}
     \item Risposta vuota: Il Result Set restituito da un interrogazione è vuoto o contiene pochi elementi. In questo caso l'utente potrebbe desiderare di rilassare in qualche modo la query, ottenendo cosi ulteriori risultati che siano in qualche modo correlati con le preferenze espresse inizialmente.
     \item Risposta troppo ampia: Quando la query non è troppo selettiva si rischia di ottenere un Result Set troppo ampio. In questo caso è naturale voler avere qualche sistema che ordini i risultati ottenuti in base ad un criterio di ranking che dovrebbe dare precedenza ad elementi che siano di  interesse maggiore per l'utente.
@@ -9,7 +9,7 @@ Per quanto riguarda il primo problema, la ricerca ha proposto varie soluzioni. L
 \\~\\
 \centerline{SELECT * FROM CarDB WHERE Model=Camry and Price$<$10000}
 \\~\\
-L'utente riceverà in output un Result Set contenente una serie di auto modello "Camry" con prezzo sotto i 10000. Nel caso in cui l'utente non sia soddisfatto del risultato, i motori di ricerca applicano un rilassamento ampliando i vincoli indifferentemente. \\
+L'utente riceverà in output un Result Set contenente una serie di auto modello \quotes{Camry} con prezzo sotto i 10000. Nel caso in cui l'utente non sia soddisfatto del risultato, i motori di ricerca applicano un rilassamento ampliando i vincoli indifferentemente. \\
 Qui sorge un problema, nella realtà ampliare in vincolo piuttosto che un altro ha un suo peso. Ad esempio un utente potrebbe essere disposto maggiormente a cambiare modello d'auto piuttosto che aumentare il budget della spesa. Ciò dimostra che è necessario un sistema di rilassamento che dia possibilità all'utente di stabilire quali siano gli attributi più importanti, che quindi non devono essere modificati, e quali siano gli attributi di importanza secondaria, sui quali l'utente è disposto ad adattarsi. 
 \section{Tecniche di Relaxing}
 \paragraph{Rilassamento banale}

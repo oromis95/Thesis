@@ -2,11 +2,12 @@
 Durante il lavoro di tesi sono stati svolti alcuni test. 
 Sono stati eseguiti su una macchina con sistema operativo Windows 10, un processore Intel Core i7 6700HQ a 2.60GHz (6M Cache, up to 3.50 GHz) e con 16Gb di RAM DDR4.
 
-Si possono evidenziare tre gruppi:
+Si possono evidenziare 4 gruppi:
 \begin{itemize}
     \item Test per il \textit{Reverse Engineering}
     \item Test di integrità 
     \item Test di prestazione
+    \item Test di rilassamento
 \end{itemize}
 
 \subsection{Test di Reverse Engineering}
@@ -40,9 +41,6 @@ Per effettuare questo controllo sono stati dichiarate tre variabili:
     \item relaxed{\_}query{\_}result{\_}set{\_}size: una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
     \item dataset{\_}size: una variabile che contiene la cardinalità del Dataset.
 \end{itemize}
-
-
-
 Si è deciso di applicare un' ottimizzazione sulla ricerca dell'RFD migliore. 
 Ogni volta che viene effettuata una Query Rilassata, prima restituire il Result Set, vengono testate le prime N RFD.
 Grazie a questi variabili è possibile controllare quanto aumenta la cardinalità del Result Set per ogni RFD. Viene quindi restituita l'RFD che produce il Result Set meno ampio possibile che sia però maggiore del Result Set restituito dalla query iniziale. In questo modo si cercano di ottenere i risultati che siano maggiormente correlati con l'interrogazione iniziale.
@@ -64,6 +62,80 @@ Si è deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in q
     \label{fig:confronto_curve}
 \end{figure}
 
+\subsection{Test di rilassamento}
+Sono stati effettuati vari test su diversi Database per testare la qualità dei Result Set prodotti dal rilassamento delle query.
+
+Un esempio significativo è quello eseguito sul Dataset in figura
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{DB.PNG}
+    \caption{Dataset cars{\_}db.csv}
+    \label{fig:dataset_cars_db}
+\end{figure}
+
+Inizialmente è stata eseguita la query:
+\begin{center}
+FROM cars{\_}db.csv WHERE Model LIKE \lq\%Focus\%\rq
+AND Price $\geq$ 7500 AND Price $\leq$ 8500
+\end{center}
+
+Il Result Set prodotto da questa query è vuoto, in quanto nel Dataset non è presenta alcuna tupla che soddisfa tali vincoli.
+Utilizzando il software di Query Relaxation sviluppato viene individuata l'RFD migliore.
+\begin{center}
+$(mileage \leq 3801.0) (model \leq 5.0) (price \leq 1700.0) \rightarrow (location \leq 8.0)$
+\end{center}
+
+Rilassando la query in base alle soglie della RFD il Result Set viene ampliato con successo, ottenendo il risultato maggiormente correlato con la query iniziale.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{DB_query_rs.PNG}
+    \caption{Risultato query rilassata su cars{\_}db.csv}
+    \label{fig:rs_query_rx_cars_db}
+\end{figure}
+
+
+Un ulteriore query interessante è quella eseguita su dataset{\_}string.csv
+\begin{center}
+FROM dataset{\_}string.csv WHERE name == \lq joh \rq
+\end{center}
+
+In questo caso il Result Set è vuoto in quanto non è presente alcuna tupla che rispetti tale vincolo.
+Il software di Query Relaxation ha individuato come migliore la seguente query:
+\begin{center}
+    $(name \leq 1.0) \rightarrow (age \leq 1.0)$
+\end{center}
+
+Rilassando la query secondo le soglie della RFD viene restituito il seguente Result Set:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l |l |l |l |}
+    \hline
+    name & sex & city & age \\
+    \hline
+    john & male & newyork &  20 \\
+    jack & male & newyork &  21 \\
+    domenico & male & newyork &  21\\
+    \hline
+    \end{tabular}
+    \caption{Result Set da query rilassata su dataset{\_}string.csv }
+    \label{tab:ds_rx_query_ds_str}
+\end{table}
+
+È interessante notare che , in questo caso , un sistema di rilassamento banale avrebbe agito solo sul parametro \textit{name} , restituendo probabilmente solo le tuple riguardanti \quotes{john} e \quotes{jack}. \\
+Mentre il sistema sviluppato è stato in grado di agire sul parametro \quotes{age} grazie alla conoscenza fornita dalla RFD.
+
+Come ultimo esempio desidero includere un caso verificatosi nelle fasi iniziali di sperimentazione. Effettuando la query :
+\begin{center}
+FROM dataset{\_}string.csv WHERE name == \lq joh \rq
+\end{center}
+su dataset{\_}string.csv gli algoritmi di ordinamento restituivano come RFD migliore la seguente:
+\begin{center}
+    $(name \leq 3.0)  \rightarrow (sex \leq 0.0)$
+\end{center}
+
+Tale RFD aveva un problma, avendo attributo \quotes{sex} in RHS, nel momento in cui si rilassava la query, si interrogava il Dataset cercando tutte le tuple che contenessero valore \quotes{male} sull'attributo sex, ciò produceva un Result Set che era di cardinalità pari a metà del Dataset. Il Dataset è abbastanza piccolo, di conseguenza non vi erano molti problemi, ma ovviamente lo stesso problema si sarebbe potuto ripresentare un Dataset molto più ampi. Per ovviare a tale inconveniente sono stato introdotti alcuni controlli, in modo tale da scartare le RFD che producessero Result Set troppo ampi.
+
+
 \section{Riflessioni}
 Dopo aver completato la descrizione del progetto sviluppato è necessario fare qualche osservazione.
 L'idea iniziale non è era quella di sviluppare un modulo professionale che permetta il rilassamento di query, ma lo scopo principale è stato quello di dimostrare che è possibile creare un sistema di rilassamento basato sulle RFD.
@@ -77,10 +149,10 @@ Seguono ora alcuni idee da implementare in futuro.
 \paragraph{Preferenze utente}
 Qualsiasi ordinamento di RFD che non tiene conto del grado di importanza degli attributi per l'utente, difficilmente produrrà un sistema che sia in grado di dare il risultato cercato.
 Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{In un universo in cui ciò sia fattibile.} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
-La questione sta nell'andare a intendere su che punto l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro "prezzo".}.
+La questione sta nell'andare a intendere su che punto l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro \quotes{prezzo}.}.
 Si suggerisce quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
 \paragraph{Sistema di query Simil-SQL}
 Le attuali opzioni di query sono abbastanza scarne, è consigliabile implementare ulteriori opzioni, prendendo d'esempio quelle del SQL. In particolare servirebbero le opzioni: groupby,orderby,in,join.
-Tranne la "join" che richiede una revisione della struttura del progetto, il resto è facilmente implementabile.
+Tranne la \quotes{join} che richiede una revisione della struttura del progetto, il resto è facilmente implementabile.
 \paragraph{Parallelizzazione}
 Tutto il progetto è stato sviluppato senza parallelizzazione. Sia l'ordinamento che la scelta della query rilassata è facilmente parallelizzabile. Ciò può portare ad un aumento delle prestazioni, di conseguenza diventa più semplice effettuare maggiori test sulle RFD, permettendo cosi di ottenere Result Set che siano di maggior interesse per l'utente.
