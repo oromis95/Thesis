@@ -14,7 +14,7 @@
 \usepackage{epsfig}
 \usepackage{float}
 \usepackage[bottom]{footmisc}
-\linespread{1.5}
+\linespread{2.0}
 \usepackage{titlesec}
 \titleformat{\chapter}[display]
 {\normalfont\huge\bfseries}{}{0pt}{\Huge}
@@ -34,12 +34,8 @@
 %\setcounter{page}{1}
 \chapter*{Abstract}
 \input{chapters/abstract.tex}
-\tableofcontents
-\listoftables
-\renewcommand\listoflistingscaption{Elenco degli snippet di codice}
-\listoflistings
 
-\chapter*{Dedica}
+\input{chapters/dedication}
 
 \chapter{Introduzione}
 \input{chapters/introduction.tex}
@@ -57,8 +53,12 @@
 \input{chapters/implementazione.tex}
 
 \chapter{Conclusioni}
-\input{chapters/conclusion.tex}
 
+\input{chapters/conclusion.tex}
+\tableofcontents
+\listoftables
+\renewcommand\listoflistingscaption{Elenco degli snippet di codice}
+\listoflistings
 \bibliographystyle{plain}
 \bibliography{references}
 \end{document}
