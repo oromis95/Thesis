@@ -12,7 +12,7 @@ Questo link fra ``PC Gaming Dell'' e ``I7 gtx 1080 SSD 256'' viene scoperto dall
 In alcuni contesti non è possibile utilizzare le FD canoniche, in quanto il concetto di uguaglianza non esiste. In questi casi vengono applicate delle funzioni di similarità ad-hoc. Gli esempi più banali cominciano dalle stringhe, dove per misurare la differenza fra due di esse si usa la distanza di \emph{Levenshtein}\footnote{La distanza di Levenshtein è una misura per la differenza di stringhe, dove si tiene conto delle lettere mancanti, sbagliate o superflue.}, o dalla data  dove per effettuare un confronto bisogna implementare il calendario gregoriano. In alcuni ambiti invece le funzioni di similarità aumentano di complessità, si pensi a come può essere strutturata una funzione di similarità in un sistema multimediale. In molti casi è opportuno implementare una fonte di conoscenza esterna, come ad esempio in un database riguardante le città europee dove conviene utilizzare una funzione che ne misuri la distanza spaziale piuttosto che la somiglianza lessicale. Le FD canoniche non ammettono l'esistenza di un funzione di similarità, in questo caso si preferiscono utilizzare le RFD.
 
 \section{Ricerca di RFD}
-Gli algoritmi di ricerca delle RFD o AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, la complessità è riconducibile al problema di trovare un insieme ricoprente minimale di RFD verificate per una relazione $r$. Ciò al momento pone un forte fardello sullo sviluppo di applicazioni che sfrutta le RFD. Con database che superano le milioni di righe è ancora svantaggioso l’approccio. Per tale motivo in questo lavoro di tesi sono stati utilizzati DataSet non troppo grandi. Al momento vi sono alcuni team che stanno lavorando alla parallelizzazione dell'algoritmo di ricerca delle RFD, e si sono già ottenuti ottimi risultati durante la fase di testing (il miglioramento delle performance è stato di circa il 75\%).
+Gli algoritmi di ricerca delle RFD o AFD hanno complessità elevata dato lo spazio di ricerca dei possibili vincoli di similarità, la complessità è riconducibile al problema di trovare un insieme ricoprente minimale di RFD verificate per una relazione $r$. Ciò al momento pone un forte fardello sullo sviluppo di applicazioni che sfrutta le RFD. Con database che superano le milioni di righe è ancora svantaggioso l’approccio. Per tale motivo in questo lavoro di tesi sono stati utilizzati DataSet non troppo grandi. Al momento vi sono alcuni team che stanno lavorando alla parallelizzazione dell'algoritmo di ricerca delle RFD, e si sono già ottenuti ottimi risultati durante la fase di testing \footnote{il miglioramento delle performance è stato di circa il 75\%.}.
 
 
 \section{Studi Preliminari}
@@ -26,7 +26,7 @@ La scelta è ricaduta su Python per tre motivi principali:
 Oltre le principali tecniche di programmazione sono stati utilizzati alcune particolari funzionalità del Python:
 
 \begin{itemize}
-\item \emph{List Comprehensions}: Uno strumento che permette di creare in modo conciso e conveniente delle liste partendo da una sequenza di valori esistenti, inoltre le \emph{comprehension} permettono anche di filtrare e trasformare gli elementi tramite costrutti if.
+\item \emph{List Comprehensions}: Uno strumento che permette di creare in modo conciso e conveniente delle liste, partendo da una sequenza di valori esistenti, inoltre le \emph{comprehension} permettono anche di filtrare e trasformare gli elementi tramite costrutti if.
 Normalmente per creare delle liste si procede in questo modo:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
@@ -139,8 +139,8 @@ per ogni $A \in X$ si cerca di controllare se la $FD$  $X\setminus A \xrightarro
 Di questo software non ne è stato studiato il funzionamento white-box, bensì si è preferito un approccio black-box focalizzandosi su cosa prende in input e cosa restituisce in output.
 
 \subsection{Input}
-Il programma prende in input un Dataset in formato csv.
-Il Dataset possiede una prima riga che funge da header, ogni nome di attributo è separato da un carattere speciale. \footnote{Solitamente viene utilizzato il simbolo  ; .}
+Il programma prende in input un DataSet in formato csv.
+Il DataSet possiede una prima riga che funge da header, ogni nome di attributo è separato da un carattere speciale. \footnote{Solitamente viene utilizzato il simbolo  ; .}
 Ogni riga del file csv costituisce una tupla.
 
 \subsection{Output}
@@ -165,4 +165,4 @@ Mentre il secondo formato ottenuto avviando il programma specificando l’opzion
 \\~\\
 \centerline{$attr_1(\leq soglia_1),attr_2(\leq soglia_2),\ldots,{attr_n}(\leq soglia_n)->RHS(\leq soglia_{rhs})$}
 \\~\\
-I tempi di esecuzione di questo algoritmo di ricerca sono abbastanza elevati, già con Dataset che superano il migliaio di righe i tempi non si misurano più in ore ma in giorni. Inoltre si è rilevato che con Dataset costituiti da poche righe ma da molti attributi i tempi di calcolo aumentano esponenzialmente.
+I tempi di esecuzione di questo algoritmo di ricerca sono abbastanza elevati, già con DataSet che superano il migliaio di righe i tempi non si misurano più in ore ma in giorni. Inoltre si è rilevato che con DataSet costituiti da poche righe ma da molti attributi i tempi di calcolo aumentano esponenzialmente.

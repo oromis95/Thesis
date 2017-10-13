@@ -4,7 +4,7 @@ Sono stati eseguiti su una macchina con sistema operativo Windows 10, un process
 
 Si possono evidenziare 4 gruppi:
 \begin{itemize}
-    \item Test per il \textit{Reverse Engineering}
+    \item Test per il Reverse Engineering
     \item Test di integrità 
     \item Test di prestazione
     \item Test di rilassamento
@@ -39,7 +39,7 @@ Per effettuare questo controllo sono stati dichiarate tre variabili:
 \begin{itemize}
     \item original{\_}query{\_}result{\_}set{\_}size: una variabile che contiene la cardinalità del Result Set restituito inizialmente.
     \item relaxed{\_}query{\_}result{\_}set{\_}size: una variabile che contiene la cardinalità del Result Set restituito dalla query rilassata.
-    \item dataset{\_}size: una variabile che contiene la cardinalità del Dataset.
+    \item dataset{\_}size: una variabile che contiene la cardinalità del DataSet.
 \end{itemize}
 Si è deciso di applicare un' ottimizzazione sulla ricerca dell'RFD migliore. 
 Ogni volta che viene effettuata una Query Rilassata, prima restituire il Result Set, vengono testate le prime N RFD.
@@ -65,11 +65,11 @@ Si è deciso di non tener conto dei tempi di ricerca/caricamento delle RFD, in q
 \subsection{Test di rilassamento}
 Sono stati effettuati vari test su diversi Database per testare la qualità dei Result Set prodotti dal rilassamento delle query.
 
-Un esempio significativo è quello eseguito sul Dataset in figura
+Un esempio significativo è quello eseguito sul DataSet in figura
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{DB.PNG}
-    \caption{Dataset cars{\_}db.csv}
+    \caption{DataSet cars{\_}db.csv}
     \label{fig:dataset_cars_db}
 \end{figure}
 
@@ -79,7 +79,7 @@ FROM cars{\_}db.csv WHERE Model LIKE \lq\%Focus\%\rq
 AND Price $\geq$ 7500 AND Price $\leq$ 8500
 \end{center}
 
-Il Result Set prodotto da questa query è vuoto, in quanto nel Dataset non è presenta alcuna tupla che soddisfa tali vincoli.
+Il Result Set prodotto da questa query è vuoto, in quanto nel DataSet non è presenta alcuna tupla che soddisfa tali vincoli.
 Utilizzando il software di Query Relaxation sviluppato viene individuata l'RFD migliore.
 \begin{center}
 $(mileage \leq 3801.0) (model \leq 5.0) (price \leq 1700.0) \rightarrow (location \leq 8.0)$
@@ -133,7 +133,7 @@ su dataset{\_}string.csv gli algoritmi di ordinamento restituivano come RFD migl
     $(name \leq 3.0)  \rightarrow (sex \leq 0.0)$
 \end{center}
 
-Tale RFD aveva un problma, avendo attributo \quotes{sex} in RHS, nel momento in cui si rilassava la query, si interrogava il Dataset cercando tutte le tuple che contenessero valore \quotes{male} sull'attributo sex, ciò produceva un Result Set che era di cardinalità pari a metà del Dataset. Il Dataset è abbastanza piccolo, di conseguenza non vi erano molti problemi, ma ovviamente lo stesso problema si sarebbe potuto ripresentare un Dataset molto più ampi. Per ovviare a tale inconveniente sono stato introdotti alcuni controlli, in modo tale da scartare le RFD che producessero Result Set troppo ampi.
+Tale RFD aveva un problma, avendo attributo \quotes{sex} in RHS, nel momento in cui si rilassava la query, si interrogava il DataSet cercando tutte le tuple che contenessero valore \quotes{male} sull'attributo sex, ciò produceva un Result Set che era di cardinalità pari a metà del DataSet. Il DataSet è abbastanza piccolo, di conseguenza non vi erano molti problemi, ma ovviamente lo stesso problema si sarebbe potuto ripresentare un DataSet molto più ampi. Per ovviare a tale inconveniente sono stato introdotti alcuni controlli, in modo tale da scartare le RFD che producessero Result Set troppo ampi.
 
 
 \section{Riflessioni}
@@ -148,7 +148,7 @@ Il progetto ha richiesto circa due mesi di sviluppo per essere completato. Si è
 Seguono ora alcuni idee da implementare in futuro.
 \paragraph{Preferenze utente}
 Qualsiasi ordinamento di RFD che non tiene conto del grado di importanza degli attributi per l'utente, difficilmente produrrà un sistema che sia in grado di dare il risultato cercato.
-Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche \footnote{In un universo in cui ciò sia fattibile.} analizzandole tutte, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
+Il problema consiste nell'impossibilità di verificare tutti i possibili legami che esistono all'interno di un Database, ed anche analizzandole tutte \footnote{In un universo in cui ciò sia fattibile.}, non è detto che l'RFD scelta restituirà il risultato cercato dall'utente. Perché ciò?
 La questione sta nell'andare a intendere su che punto l'utente è disposto a cedere. Se inizialmente effettua una query contente tre attributi, l'utente magari su alcuni di essi è disposto ad essere flessibile, mentre su altri non vuole compromessi \footnote{Si pensi a quando si cerca un prodotto su di uno Store, quasi nessuno vuole compromessi sul parametro \quotes{prezzo}.}.
 Si suggerisce quindi di implementare un sistema che permetta all'utente di specificare il grado di flessibilità di ogni parametro.
 \paragraph{Sistema di query Simil-SQL}

@@ -7,8 +7,8 @@ Il progetto è incluso in una cartella contenente anche il software di ricerca d
     \label{fig:struct_project}
 \end{figure}
 
-\subsection{Package Dataset}
-Il package Dataset include una serie di Dataset in formato $csv$ ed una cartella contente le rispettive liste di RFD già precalcolate. I Dataset inclusi nel progetto sono:
+\subsection{Package DataSet}
+Il package DataSet include una serie di DataSet in formato $csv$ ed una cartella contente le rispettive liste di RFD già precalcolate. I DataSet inclusi nel progetto sono:
 \begin{itemize}[noitemsep]
 \let\labelitemi\labelitemii
     \item cars.csv
@@ -35,7 +35,7 @@ Sono state già calcolate le seguenti liste di RFD:
 \end{itemize}
 
 
-La maggior parte dei Dataset sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa.
+La maggior parte dei DataSet sono in formato numerico, ma ne sono presenti alcuni che possiedono attributi sia in formato numerico che di tipo stringa.
 
 \subsection{Package io}
 In questo package sono contenuti diversi moduli divisi in baso al loro scopo. Vi sono due sottocartelle che raggruppano il tutto.
@@ -178,7 +178,7 @@ def search_rfds(csvPath,name_rfds_file):
 
 IL primo metodo \quotes{diff} prende in input due liste, e restituisce una lista di elementi che sono presenti nella prima ma non nella seconda.
 
-Il secondo metodo richiama l'algoritmo di Ricerca delle RFD\footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati.} e crea un file contente una lista di RFD. Prende in input il path del file contenente il Dataset, e una stringa che contiene il nome del file che incapsula le RFD. 
+Il secondo metodo richiama l'algoritmo di Ricerca delle RFD\footnote{In questo caso non è semplice richiamo di una funzione, bensì vengono richiamati una serie di metodi, e mano a mano vengono effettuate delle elaborazioni sui dati.} e crea un file contente una lista di RFD. Prende in input il path del file contenente il DataSet, e una stringa che contiene il nome del file che incapsula le RFD. 
 
 \subsection{Package query}
 Nel package query vi sono tre moduli, tutte e tre si occupano di svolgere operazioni riguardanti le interrogazioni al dataset.
@@ -237,7 +237,7 @@ Il metodo drop{\_}query{\_}na(...) si occupa di eliminare tutte le RFD che possi
 
 Il metodo drop{\_}query{\_}rhs(...) si occupa di eliminare tutte le RFD che possiedono un attributo della query come parte RHS. Il metodo prende in input un pandas.Dataframe contenente la lista di RFD ed un dizionario contenente la query, restituisce un altro pandas.Dataframe.
 
-Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di NaN presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
+Il metodo sort{\_}by{\_}decreasing{\_}nan{\_}incresing{\_}threshold(...), contiene un algoritmo di ordinamento. Il metodo prende in input un pandas.Dataframe ordina prima per numero di \quotes{NaN} presenti e poi per ordine crescente rispetto alla soglie, restituisce un pandas.Dataframe.
 
 Il metodo sort{\_}by{\_}increasing{\_}threshold(...), contiene un altro algoritmo di ordinamento, che è stato utilizzato solo nei test, dove è risultato poco producente. Il metodo prende in input un pandas.Dataframe e un dizionario contenente la query. Restitusce un altro pandas.Dataframe ordinato solo rispetto alle soglie degli attributi \footnote{In entrambi gli algoritmi di ordinamento vengono ordinate prima le soglie degli attributi contenuti nella query e poi in caso di valori uguali si ordina rispetto alle soglie degli altri attributi in LHS.}.
 
@@ -306,17 +306,16 @@ Il metodo slice() si occupa di dividere un pandas.Dataframe, ogni tupla andrà a
 
 \subsection{Modulo main.py}
 Modulo che lancia il programma vero e proprio. Richiede
-l'inserimento del nome di un Dataset, assieme ad una serie di opzioni
+l'inserimento del nome di un DataSet, assieme ad una serie di opzioni
 facoltative, secondo la seguente struttura:
 \begin{listing}[H]
 \begin{minted}[frame=lines,linenos]{python}
 python main .py -p <path-of-dataset > -q <query> [ options ]
 \end{minted}
 \end{listing}
-
 dove:
 \begin{itemize}
-\item path-of-dataset è il path relativo Dataset da utilizzare per le query.
+\item path-of-dataset è il path relativo DataSet da utilizzare per le query.
 \item query è il parametro contenente la query, essa può avere la seguente struttura\footnote{I valori nel caso siano in formato stringa vanno racchiusi fra apici singoli. Ciò viene fatto per evitare problemi nella lettura di eventuali spazi bianchi.}:
 \begin{itemize}
 \item query semplice : \mint{json}|"{'nome_attributo',valore_attributo}"|

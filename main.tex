@@ -14,7 +14,7 @@
 \usepackage{epsfig}
 \usepackage{float}
 \usepackage[bottom]{footmisc}
-\linespread{2.0}
+
 \usepackage{titlesec}
 \titleformat{\chapter}[display]
 {\normalfont\huge\bfseries}{}{0pt}{\Huge}
@@ -26,17 +26,28 @@
 \renewcommand{\theFancyVerbLine}{\sffamily \textcolor[rgb]{0,0,0}{\large \oldstylenums{\arabic{FancyVerbLine}}}}
 \newcommand{\quotes}[1]{``#1''}
 
+\usepackage{setspace}
+\doublespacing
+\linespread{2.0}
+
+
+
 \begin{document}
 
 \begin{titlepage}
 \input{chapters/front.tex}
 \end{titlepage}
-%\clearpage
-%\setcounter{page}{1}
-\chapter*{Abstract}
-\input{chapters/abstract.tex}
 
 \input{chapters/dedication}
+
+\chapter*{Abstract}
+
+\tableofcontents
+\listoftables
+\renewcommand\listoflistingscaption{Elenco degli snippet di codice}
+\listoflistings
+
+\input{chapters/abstract.tex}
 
 \chapter{Introduzione}
 \input{chapters/introduction.tex}
@@ -56,10 +67,9 @@
 \chapter{Conclusioni}
 
 \input{chapters/conclusion.tex}
-\tableofcontents
-\listoftables
-\renewcommand\listoflistingscaption{Elenco degli snippet di codice}
-\listoflistings
+
 \bibliographystyle{plain}
 \bibliography{references}
+\chapter*{Ringraziamenti}
+\input{chapters/acknowledgments.tex}
 \end{document}
