@@ -30,7 +30,7 @@
 \doublespacing
 \linespread{2.0}
 
-
+\usepackage{calligra}
 
 \begin{document}
 
@@ -40,14 +40,15 @@
 
 \input{chapters/dedication}
 
-\chapter*{Abstract}
+\chapter{Abstract}
+\input{chapters/abstract.tex}
 
 \tableofcontents
 \listoftables
 \renewcommand\listoflistingscaption{Elenco degli snippet di codice}
 \listoflistings
 
-\input{chapters/abstract.tex}
+
 
 \chapter{Introduzione}
 \input{chapters/introduction.tex}
@@ -70,6 +71,6 @@
 
 \bibliographystyle{plain}
 \bibliography{references}
-\chapter*{Ringraziamenti}
+\chapter{Ringraziamenti}
 \input{chapters/acknowledgments.tex}
 \end{document}
